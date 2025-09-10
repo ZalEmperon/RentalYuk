@@ -16,69 +16,81 @@
 
     <div class="mt-8 flex flex-col lg:flex-row gap-8">
       <!-- Kolom Filter -->
-      <aside class="w-full lg:w-1/4">
-        <div class="bg-white p-6 rounded-lg shadow-lg sticky top-28">
-          <h3 class="text-xl font-semibold mb-4 border-b pb-3">Filter Pencarian</h3>
+            <aside class="w-full lg:w-1/4">
+          <div class="bg-white p-6 rounded-lg shadow-lg sticky top-28">
+              <h3 class="text-xl font-semibold mb-4 border-b pb-3">Filter Pencarian</h3>
 
-          <!-- Filter Tipe Kendaraan -->
-          <div class="mb-6">
-            <h4 class="font-semibold mb-3">Tipe Kendaraan</h4>
-            <div class="space-y-2">
-              <label class="flex items-center">
-                <input type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
-                  checked>
-                <span class="ml-2 text-gray-700">Mobil Manual</span>
-              </label>
-              <label class="flex items-center">
-                <input type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
-                  checked>
-                <span class="ml-2 text-gray-700">Mobil Matic</span>
-              </label>
-            </div>
+              <div class="mb-6">
+                  <h4 class="font-semibold mb-3">Tipe Transmisi</h4>
+                  <div class="space-y-2">
+                      <label class="flex items-center">
+                          <input type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                          <span class="ml-2 text-gray-700">Manual</span>
+                      </label>
+                      <label class="flex items-center">
+                          <input type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                          <span class="ml-2 text-gray-700">Matic</span>
+                      </label>
+                  </div>
+              </div>
+
+              <div class="mb-6">
+                  <h4 class="font-semibold mb-3">Jenis Bahan Bakar</h4>
+                  <select id="fuel_type" name="fuel_type"
+                      class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                      <option value="">Semua Jenis</option>
+                      <option value="bensin">Bensin</option>
+                      <option value="diesel">Diesel</option>
+                      <option value="listrik">Listrik</option>
+                  </select>
+              </div>
+
+              <div class="mb-6">
+                  <h4 class="font-semibold mb-3">Rentang Harga</h4>
+                  <div class="grid grid-cols-2 gap-4">
+                      <div>
+                          <label for="min_price" class="block text-sm font-medium text-gray-700">Min Harga</label>
+                          <input type="number" name="min_price" id="min_price" placeholder="Rp 100.000"
+                              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                      </div>
+                      <div>
+                          <label for="max_price" class="block text-sm font-medium text-gray-700">Max Harga</label>
+                          <input type="number" name="max_price" id="max_price" placeholder="Rp 1.000.000"
+                              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                      </div>
+                  </div>
+              </div>
+
+              <div>
+                  <h4 class="font-semibold mb-3">Kapasitas Penumpang</h4>
+                  <div class="space-y-2">
+                      <label class="flex items-center">
+                          <input type="radio" name="kapasitas"
+                              class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                          <span class="ml-2 text-gray-700">Semua</span>
+                      </label>
+                      <label class="flex items-center">
+                          <input type="radio" name="kapasitas"
+                              class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                          <span class="ml-2 text-gray-700">2 - 4 orang</span>
+                      </label>
+                      <label class="flex items-center">
+                          <input type="radio" name="kapasitas"
+                              class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                          <span class="ml-2 text-gray-700">5 - 7 orang</span>
+                      </label>
+                      <label class="flex items-center">
+                          <input type="radio" name="kapasitas"
+                              class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                          <span class="ml-2 text-gray-700">&gt; 7 orang</span>
+                      </label>
+                  </div>
+              </div>
+
+              <button
+                  class="w-full mt-6 bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 transition duration-300">Terapkan
+                  Filter</button>
           </div>
-
-          <!-- Filter Harga -->
-          <div class="mb-6">
-            <h4 class="font-semibold mb-3">Rentang Harga</h4>
-            <input type="range" min="100000" max="1000000" value="500000"
-              class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
-            <div class="flex justify-between text-sm text-gray-600 mt-2">
-              <span>Rp 100rb</span>
-              <span>Rp 1jt</span>
-            </div>
-          </div>
-
-          <!-- Filter Kapasitas -->
-          <div>
-            <h4 class="font-semibold mb-3">Kapasitas Penumpang</h4>
-            <div class="space-y-2">
-              <label class="flex items-center">
-                <input type="radio" name="kapasitas"
-                  class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-                <span class="ml-2 text-gray-700">Semua</span>
-              </label>
-              <label class="flex items-center">
-                <input type="radio" name="kapasitas"
-                  class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-                <span class="ml-2 text-gray-700">2 - 4 orang</span>
-              </label>
-              <label class="flex items-center">
-                <input type="radio" name="kapasitas"
-                  class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-                <span class="ml-2 text-gray-700">5 - 7 orang</span>
-              </label>
-              <label class="flex items-center">
-                <input type="radio" name="kapasitas"
-                  class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-                <span class="ml-2 text-gray-700">> 7 orang</span>
-              </label>
-            </div>
-          </div>
-
-          <button
-            class="w-full mt-6 bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 transition duration-300">Terapkan
-            Filter</button>
-        </div>
       </aside>
 
       <!-- Kolom Hasil Pencarian -->
