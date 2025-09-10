@@ -21,7 +21,7 @@ class OwnerController extends Controller
     public function ownerTampilDashboard()
     {
         $ownerQuotas = DB::table('user_plans')->join('plans', 'plans.id', '=', 'user_plans.plan_id')
-            ->join('vehicles', 'user_plans.user_id', '=', 'vehicles.user_id')->where('user_plans.user_id', Auth::user()->id)
+            ->leftJoin('vehicles', 'user_plans.user_id', '=', 'vehicles.user_id')->where('user_plans.user_id', Auth::user()->id)
             ->select('plans.quota_ads', DB::raw('COUNT(vehicles.id) as jumlah_iklan'))->groupBy('plans.quota_ads')->first();
         $ownerDatas = DB::table('vehicles')->where('user_id', Auth::user()->id)
             ->select('id', 'brand', 'model', 'city', 'price_per_day', 'status', 'mod_status', 'created_at')
@@ -61,7 +61,7 @@ class OwnerController extends Controller
             ->join('user_plans', 'user_plans.plan_id', '=', 'plans.id')
             ->where('user_plans.user_id', Auth::user()->id)
             ->select('plans.name')->first();
-        session(['plan' => $plan]);
+        session(['plan' => $plan->name]);
         return redirect('/owner/dashboard')->with(['status' => 'Persiapan Periklanan Sudah Siap']);
     }
 
