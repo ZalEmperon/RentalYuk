@@ -18,8 +18,11 @@ return new class extends Migration
             $table->text('description');
             $table->decimal('price_per_day', 12, 2);
             $table->string('city');
+            $table->string('transmission');
+            $table->string('capacity');
+            $table->string('fuel_type');
+            $table->string('view_count')->default(0);
             $table->text('address');
-            $table->string('main_photo_url')->nullable(); // URL foto utama
             $table->enum('status', ['active', 'inactive'])->default('inactive');
             $table->enum('mod_status', ['approve', 'waiting', 'reject'])->default('waiting');
             $table->boolean('is_premium')->default(false);

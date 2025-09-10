@@ -12,7 +12,7 @@
   </button>
   <h1 class="text-xl font-semibold text-gray-800">Selamat Datang, {{ auth()->user()->name }}</h1>
   <div class="flex items-center space-x-4">
-    <span class="text-sm">Paket: <span class="font-semibold text-indigo-600">Premium</span></span>
+    <span class="text-sm">Paket: <span class="font-semibold text-indigo-600">{{session('plan')}}</span></span>
     <img class="h-10 w-10 rounded-full object-cover" src="https://placehold.co/100x100/667eea/ffffff?text=B"
       alt="User avatar">
   </div>
