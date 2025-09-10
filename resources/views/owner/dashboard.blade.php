@@ -3,7 +3,7 @@
 @section('page-content')
   <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
     <!-- Stat Cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div class="bg-white p-6 rounded-lg shadow-lg flex items-center justify-between">
         <div>
           <p class="text-sm text-gray-500">Total Iklan Aktif</p>
@@ -30,19 +30,6 @@
             </path>
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
-            </path>
-          </svg>
-        </div>
-      </div>
-      <div class="bg-white p-6 rounded-lg shadow-lg flex items-center justify-between">
-        <div>
-          <p class="text-sm text-gray-500">Klik WhatsApp (30 hari)</p>
-          <p class="text-3xl font-bold text-gray-800">89</p>
-        </div>
-        <div class="bg-blue-100 text-blue-600 p-3 rounded-full">
-          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z">
             </path>
           </svg>
         </div>
