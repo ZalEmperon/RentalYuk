@@ -2,7 +2,8 @@
 
 @section('page-content')
   <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
-    <form action="/owner/form-iklan/edit/{{ $vehicleDatas->id }}" method="POST" class="space-y-8" enctype="multipart/form-data">
+    <form action="/owner/form-iklan/edit/{{ $vehicleDatas->id }}" method="POST" class="space-y-8"
+      enctype="multipart/form-data">
       @csrf
       @method('PUT')
       <!-- Section 1: Informasi Dasar -->
@@ -13,8 +14,8 @@
             <label for="type" class="block text-sm font-medium text-gray-700">Jenis Kendaraan</label>
             <select id="type" name="type"
               class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-              <option {{ $vehicleDatas->type == 'mobil' ? 'selected' : '' }}>Mobil</option>
-              <option {{ $vehicleDatas->type == 'motor' ? 'selected' : '' }}>Motor</option>
+              <option {{ strtolower($vehicleDatas->type) == 'mobil' ? 'selected' : '' }}>Mobil</option>
+              <option {{ strtolower($vehicleDatas->type) == 'motor' ? 'selected' : '' }}>Motor</option>
             </select>
           </div>
           <div>
@@ -35,6 +36,32 @@
               value="{{ $vehicleDatas->year }}"
               class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
           </div>
+          <!-- PENAMBAHAN: Spesifikasi Kendaraan -->
+          <div>
+            <label for="transmission" class="block text-sm font-medium text-gray-700">Transmisi</label>
+            <select id="transmission" name="transmission"
+              class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+              <option {{ $vehicleDatas->transmission == 'Manual' ? 'selected' : '' }}>Manual</option>
+              <option {{ $vehicleDatas->transmission == 'Otomatis' ? 'selected' : '' }}>Otomatis</option>
+            </select>
+          </div>
+          <div>
+            <label for="capacity" class="block text-sm font-medium text-gray-700">Kapasitas Penumpang</label>
+            <input type="number" name="capacity" id="capacity" placeholder="Jumlah kursi, contoh: 7" min="1"
+              value="{{ $vehicleDatas->capacity }}"
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+          </div>
+          <div class="md:col-span-2">
+            <label for="fuel_type" class="block text-sm font-medium text-gray-700">Jenis Bahan Bakar</label>
+            <select id="fuel_type" name="fuel_type"
+              class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+              <option {{ $vehicleDatas->fuel_type == 'Bensin' ? 'selected' : '' }}>Bensin</option>
+              <option {{ $vehicleDatas->fuel_type == 'Solar (Diesel)' ? 'selected' : '' }}>Solar (Diesel)</option>
+              <option {{ $vehicleDatas->fuel_type == 'Listrik' ? 'selected' : '' }}>Listrik</option>
+              <option {{ $vehicleDatas->fuel_type == 'Hybrid' ? 'selected' : '' }}>Hybrid</option>
+            </select>
+          </div>
+          <!-- AKHIR PENAMBAHAN -->
         </div>
       </div>
 
@@ -89,7 +116,7 @@
             <div class="flex text-sm text-gray-600">
               <label for="file-upload"
                 class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                <span>Unggah file</span>
+                <span>Unggah file baru</span>
                 <input id="file-upload" name="photo[]" type="file" class="sr-only" multiple>
               </label>
               <p class="pl-1">atau seret dan lepas</p>
@@ -101,9 +128,8 @@
                 <div class="relative group">
                   <img src="{{ asset('storage/photo/' . $vehicleDatas->type . '/' . $photo->photo_url) }}"
                     class="h-20 w-20 object-cover rounded shadow">
-                  <!-- remove button -->
                   <button type="button" data-photo-id="{{ $photo->id }}"
-                    class="remove-photo absolute -top-2 -right-2 bg-red-600 text-white rounded-full p-1 px-2 text-xs opacity-100 transition">
+                    class="remove-photo absolute -top-2 -right-2 bg-red-600 text-white rounded-full p-0.5 w-6 h-6 flex items-center justify-center text-sm transition-opacity opacity-75 group-hover:opacity-100">
                     ✕
                   </button>
                 </div>
@@ -132,34 +158,31 @@
     const deletedPhotosInput = document.getElementById("deleted_photos");
     let deletedPhotos = [];
 
-    // Highlight dropzone on drag
     ["dragenter", "dragover"].forEach(event => {
       dropzone.addEventListener(event, e => {
         e.preventDefault();
+        e.stopPropagation();
         dropzone.classList.add("border-indigo-500", "bg-indigo-50");
       });
     });
+
     ["dragleave", "drop"].forEach(event => {
       dropzone.addEventListener(event, e => {
         e.preventDefault();
+        e.stopPropagation();
         dropzone.classList.remove("border-indigo-500", "bg-indigo-50");
       });
     });
 
-    // Handle file drop
     dropzone.addEventListener("drop", e => {
       e.preventDefault();
       e.stopPropagation();
-
       const dt = new DataTransfer();
       [...fileInput.files, ...e.dataTransfer.files].forEach(file => dt.items.add(file));
-
       fileInput.files = dt.files;
-
       handleFiles(e.dataTransfer.files);
     });
 
-    // Handle file input (normal click)
     fileInput.addEventListener("change", e => {
       handleFiles(fileInput.files);
     });
@@ -167,37 +190,29 @@
     function handleFiles(files) {
       [...files].forEach(file => {
         if (!file.type.startsWith("image/")) return;
-
         const reader = new FileReader();
         reader.onload = e => {
           const wrapper = document.createElement("div");
-          wrapper.classList.add("relative", "group");
+          wrapper.classList.add("relative", "group", "new-upload");
 
           const img = document.createElement("img");
           img.src = e.target.result;
           img.classList.add("h-20", "w-20", "object-cover", "rounded", "shadow");
-
-          const btn = document.createElement("button");
-          btn.type = "button";
-          btn.innerText = "✕";
-          btn.className =
-            "remove-photo absolute top-0 right-0 bg-red-600 text-white rounded-full p-1 text-xs opacity-0 group-hover:opacity-100 transition";
-          btn.addEventListener("click", () => wrapper.remove());
-
+          
           wrapper.appendChild(img);
-          wrapper.appendChild(btn);
           preview.appendChild(wrapper);
         };
         reader.readAsDataURL(file);
       });
     }
 
-    // Remove existing photo
     document.querySelectorAll(".remove-photo").forEach(btn => {
       btn.addEventListener("click", function() {
         const photoId = this.dataset.photoId;
         if (photoId) {
-          deletedPhotos.push(photoId);
+          if (!deletedPhotos.includes(photoId)) {
+            deletedPhotos.push(photoId);
+          }
           deletedPhotosInput.value = JSON.stringify(deletedPhotos);
         }
         this.parentElement.remove();

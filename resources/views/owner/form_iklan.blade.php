@@ -31,6 +31,31 @@
             <input type="number" name="year" id="year" placeholder="Contoh: 2022" min="1970" max="2025"
               class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
           </div>
+          <!-- PENAMBAHAN: Spesifikasi Kendaraan -->
+          <div>
+            <label for="transmission" class="block text-sm font-medium text-gray-700">Transmisi</label>
+            <select id="transmission" name="transmission"
+              class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+              <option>Manual</option>
+              <option>Otomatis</option>
+            </select>
+          </div>
+          <div>
+            <label for="capacity" class="block text-sm font-medium text-gray-700">Kapasitas Penumpang</label>
+            <input type="number" name="capacity" id="capacity" placeholder="Jumlah kursi, contoh: 7" min="1"
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+          </div>
+          <div class="md:col-span-2">
+            <label for="fuel_type" class="block text-sm font-medium text-gray-700">Jenis Bahan Bakar</label>
+            <select id="fuel_type" name="fuel_type"
+              class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+              <option>Bensin</option>
+              <option>Solar (Diesel)</option>
+              <option>Listrik</option>
+              <option>Hybrid</option>
+            </select>
+          </div>
+          <!-- AKHIR PENAMBAHAN -->
         </div>
       </div>
 
@@ -97,8 +122,6 @@
 
       <!-- Tombol Aksi -->
       <div class="flex justify-end space-x-4">
-        {{-- <button type="button"
-        class="bg-gray-200 text-gray-700 px-6 py-2 rounded-md hover:bg-gray-300 font-semibold text-sm transition duration-300">Batal</button> --}}
         <button type="submit"
           class="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700 font-semibold text-sm transition duration-300">Simpan
           Iklan</button>
@@ -113,7 +136,6 @@
     const fileInput = document.getElementById("file-upload");
     const preview = document.getElementById("preview");
 
-    // Highlight dropzone on drag
     ["dragenter", "dragover"].forEach(event => {
       dropzone.addEventListener(event, e => {
         e.preventDefault();
@@ -130,7 +152,6 @@
       });
     });
 
-    // Handle file drop
     dropzone.addEventListener("drop", e => {
       e.preventDefault();
       e.stopPropagation();
@@ -140,15 +161,14 @@
       handleFiles(e.dataTransfer.files);
     });
 
-    // Handle file input (normal click)
     fileInput.addEventListener("change", e => {
       handleFiles(fileInput.files);
     });
 
     function handleFiles(files) {
+      preview.innerHTML = ''; // Membersihkan preview sebelum menampilkan yang baru
       [...files].forEach(file => {
         if (!file.type.startsWith("image/")) return;
-
         const reader = new FileReader();
         reader.onload = e => {
           const img = document.createElement("img");
