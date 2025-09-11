@@ -91,24 +91,26 @@
       <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center animate-on-scroll">Pilihan Mobil Populer</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {{-- Card Mobil --}}
-        @foreach ($cars as $car)
-        <div class="bg-white rounded-xl shadow-lg overflow-hidden group animate-on-scroll delay-{{ $loop->iteration * 100 }}">
-          <div class="overflow-hidden">
-            <img src="{{ $car['img_placeholder'] }}" alt="{{ $car['nama'] }}" class="w-full h-56 object-cover transform group-hover:scale-110 transition-transform duration-500 ease-in-out">
-          </div>
-          <div class="p-6">
-            <h3 class="text-xl font-semibold mb-2 text-gray-800">{{ $car['nama'] }}</h3>
-            <div class="flex items-center gap-4 text-sm text-gray-600 mb-4">
-              <span class="flex items-center gap-1.5"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>{{ $car['spek1'] }}</span>
-              <span class="flex items-center gap-1.5"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>{{ $car['spek2'] }}</span>
-            </div>
-            <div class="flex justify-between items-center border-t pt-4 mt-4">
-              <p class="text-lg font-bold text-indigo-600">Rp {{ $car['harga'] }}<span class="text-sm font-normal text-gray-500">/hari</span></p>
-              <a href="#" class="bg-indigo-600 text-white px-5 py-2 rounded-lg hover:bg-indigo-500 font-semibold text-sm transition-all duration-300 transform hover:scale-105">Sewa</a>
-            </div>
-          </div>
-        </div>
-        @endforeach
+        @foreach ($mobil as $data)
+<div class="bg-white rounded-xl shadow-lg overflow-hidden group animate-on-scroll delay-{{ $loop->iteration * 100 }}">
+  <div class="overflow-hidden">
+    <img src="{{ $data->main_photo_url ? asset('storage/photo/' . $data->type . '/' . $data->main_photo_url) : 'https://placehold.co/600x400/3498db/ffffff?text=No+Image' }}" alt="{{ $data->brand }} {{ $data->model }}" class="w-full h-56 object-cover transform group-hover:scale-110 transition-transform duration-700 ease-in-out">
+  </div>
+  <div class="p-6">
+    <h3 class="text-xl font-semibold mb-2 text-gray-800">{{ $data->brand }} {{ $data->model }}</h3>
+    <div class="flex items-center gap-4 text-sm text-gray-600 mb-4">
+      {{-- Menampilkan Transmisi --}}
+      <span class="flex items-center gap-1.5"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>{{ $data->transmission }}</span>
+      {{-- Menampilkan Kapasitas --}}
+      <span class="flex items-center gap-1.5"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>{{ $data->capacity }} Kursi</span>
+    </div>
+    <div class="flex justify-between items-center border-t pt-4 mt-4">
+      <p class="text-lg font-bold text-indigo-600">Rp {{ number_format($data->price_per_day, 0, ',', '.') }}<span class="text-sm font-normal text-gray-500">/hari</span></p>
+      <a href="/detail/{{ $data->id }}" class="bg-indigo-600 text-white px-5 py-2 rounded-lg hover:bg-indigo-500 font-semibold text-sm transition-all duration-300 transform hover:scale-105">Sewa</a>
+    </div>
+  </div>
+</div>
+@endforeach
       </div>
     </div>
   </section>
@@ -119,24 +121,26 @@
       <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center animate-on-scroll">Pilihan Motor Terlaris</h2>
        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {{-- Card Motor --}}
-        @foreach ($motorcycles as $motor)
-        <div class="bg-white rounded-xl shadow-lg overflow-hidden group animate-on-scroll delay-{{ $loop->iteration * 100 }}">
-          <div class="overflow-hidden">
-             <img src="{{ $motor['img_placeholder'] }}" alt="{{ $motor['nama'] }}" class="w-full h-56 object-cover transform group-hover:scale-110 transition-transform duration-500 ease-in-out">
-          </div>
-          <div class="p-6">
-            <h3 class="text-xl font-semibold mb-2 text-gray-800">{{ $motor['nama'] }}</h3>
-            <div class="flex items-center gap-4 text-sm text-gray-600 mb-4">
-                <span class="flex items-center gap-1.5"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a5.25 5.25 0 016.38 4.5H18a2.25 2.25 0 012.25 2.25v3.75a2.25 2.25 0 01-2.25 2.25H6.75a2.25 2.25 0 01-2.25-2.25v-3.75a2.25 2.25 0 012.25-2.25h1.87a5.25 5.25 0 016.38-4.5zM12 12.75a.75.75 0 100-1.5.75.75 0 000 1.5z" /></svg>{{ $motor['spek1'] }}</span>
-                <span class="flex items-center gap-1.5"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" /></svg>{{ $motor['spek2'] }}</span>
-            </div>
-            <div class="flex justify-between items-center border-t pt-4 mt-4">
-              <p class="text-lg font-bold text-indigo-600">Rp {{ $motor['harga'] }}<span class="text-sm font-normal text-gray-500">/hari</span></p>
-              <a href="#" class="bg-indigo-600 text-white px-5 py-2 rounded-lg hover:bg-indigo-500 font-semibold text-sm transition-all duration-300 transform hover:scale-105">Sewa</a>
-            </div>
-          </div>
-        </div>
-        @endforeach
+        @foreach ($motor as $data)
+<div class="bg-white rounded-xl shadow-lg overflow-hidden group animate-on-scroll delay-{{ $loop->iteration * 100 }}">
+  <div class="overflow-hidden">
+     <img src="{{ $data->main_photo_url ? asset('storage/photo/' . $data->type . '/' . $data->main_photo_url) : 'https://placehold.co/600x400/1abc9c/ffffff?text=No+Image' }}" alt="{{ $data->brand }} {{ $data->model }}" class="w-full h-56 object-cover transform group-hover:scale-110 transition-transform duration-700 ease-in-out">
+  </div>
+  <div class="p-6">
+    <h3 class="text-xl font-semibold mb-2 text-gray-800">{{ $data->brand }} {{ $data->model }}</h3>
+    <div class="flex items-center gap-4 text-sm text-gray-600 mb-4">
+        {{-- Menampilkan Transmisi --}}
+        <span class="flex items-center gap-1.5"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a5.25 5.25 0 016.38 4.5H18a2.25 2.25 0 012.25 2.25v3.75a2.25 2.25 0 01-2.25-2.25H6.75a2.25 2.25 0 01-2.25-2.25v-3.75a2.25 2.25 0 012.25-2.25h1.87a5.25 5.25 0 016.38-4.5zM12 12.75a.75.75 0 100-1.5.75.75 0 000 1.5z" /></svg>{{ $data->transmission }}</span>
+        {{-- Menampilkan Kapasitas (untuk motor mungkin tidak relevan, tapi bisa ditampilkan jika ada) --}}
+        <span class="flex items-center gap-1.5"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>{{ $data->capacity }} Orang</span>
+    </div>
+    <div class="flex justify-between items-center border-t pt-4 mt-4">
+      <p class="text-lg font-bold text-indigo-600">Rp {{ number_format($data->price_per_day, 0, ',', '.') }}<span class="text-sm font-normal text-gray-500">/hari</span></p>
+      <a href="/detail/{{ $data->id }}" class="bg-indigo-600 text-white px-5 py-2 rounded-lg hover:bg-indigo-500 font-semibold text-sm transition-all duration-300 transform hover:scale-105">Sewa</a>
+    </div>
+  </div>
+</div>
+@endforeach
       </div>
     </div>
   </section>

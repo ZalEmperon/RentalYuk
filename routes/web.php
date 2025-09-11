@@ -6,10 +6,13 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OwnerController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
+use App\Http\Controllers\HomeController;
 
-Route::get('/', function () {
-    return view('client.home');
-});
+Route::get('/', [HomeController::class, 'index']);
+
+// Route::get('/', function () {
+//     return view('client.home');
+// });
 
 Route::get('/pencarian', function () {
     return view('client.hasil_pencarian');
