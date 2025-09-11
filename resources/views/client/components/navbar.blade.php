@@ -1,12 +1,12 @@
 <!-- Header -->
 <header class="bg-white shadow-md sticky top-0 z-50">
   <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-    <a href="#" class="text-2xl font-bold text-indigo-600">RentalYuk</a>
+    <a href="/" class="text-2xl font-bold text-indigo-600">RentalYuk</a>
     <div class="hidden md:flex space-x-8 items-center">
-      <a href="#mobil" class="text-gray-600 hover:text-indigo-600 transition duration-300">Sewa Mobil</a>
-      <a href="#motor" class="text-gray-600 hover:text-indigo-600 transition duration-300">Sewa Motor</a>
-      <a href="#tentang" class="text-gray-600 hover:text-indigo-600 transition duration-300">Tentang Kami</a>
-      <a href="#kontak" class="text-gray-600 hover:text-indigo-600 transition duration-300">Kontak</a>
+      <a href="/#mobil" class="text-gray-600 hover:text-indigo-600 transition duration-300">Sewa Mobil</a>
+      <a href="/#motor" class="text-gray-600 hover:text-indigo-600 transition duration-300">Sewa Motor</a>
+      <a href="/sewa-kendaraan-semua" class="text-gray-600 hover:text-indigo-600 transition duration-300">Pencarian</a>
+      <a href="/#tentang" class="text-gray-600 hover:text-indigo-600 transition duration-300">Tentang Kami</a>
     </div>
     <div class="hidden md:flex items-center space-x-4">
       @auth
@@ -35,10 +35,10 @@
   </nav>
   <!-- Mobile Menu -->
   <div id="mobile-menu" class="hidden md:hidden px-6 pt-2 pb-4">
-    <a href="#mobil" class="block text-gray-600 hover:text-indigo-600 py-2">Sewa Mobil</a>
-    <a href="#motor" class="block text-gray-600 hover:text-indigo-600 py-2">Sewa Motor</a>
-    <a href="#tentang" class="block text-gray-600 hover:text-indigo-600 py-2">Tentang Kami</a>
-    <a href="#kontak" class="block text-gray-600 hover:text-indigo-600 py-2">Kontak</a>
+    <a href="/#mobil" class="block text-gray-600 hover:text-indigo-600 py-2">Sewa Mobil</a>
+    <a href="/#motor" class="block text-gray-600 hover:text-indigo-600 py-2">Sewa Motor</a>
+    <a href="/sewa-kendaraan-semua" class="block text-gray-600 hover:text-indigo-600 py-2">Pencarian</a>
+    <a href="/#tentang" class="block text-gray-600 hover:text-indigo-600 py-2">Tentang Kami</a>
     <div class="border-t border-gray-200 mt-4 pt-4">
       @auth
         <!-- Button trigger -->

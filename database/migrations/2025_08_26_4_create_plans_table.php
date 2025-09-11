@@ -11,9 +11,10 @@ return new class extends Migration
         Schema::create('plans', function (Blueprint $table) {
             $table->id();
             $table->string('name'); // Nama paket: Gratis, Premium
-            $table->decimal('price', 12, 2)->nullable();; // Harga paket
+            $table->decimal('price', 12, 2)->nullable(); // Harga paket
             $table->integer('quota_ads'); // Jumlah iklan yang didapat
-            $table->integer('duration_days')->nullable();; // Lama aktif paket dalam hari
+            $table->integer('duration_days')->nullable(); // Lama aktif paket dalam hari
+            $table->text('description');
             $table->timestamps();
         });
     }

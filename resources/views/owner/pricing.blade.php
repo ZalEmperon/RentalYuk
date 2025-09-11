@@ -1,18 +1,22 @@
+<!DOCTYPE html>
+<html lang="id">
 
-@extends('client.components.base')
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paket - RentalYuk</title>
+  @vite(['resources/css/app.css', 'resources/js/app.js'])
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
 
-@section('title', 'Pilih Paket Iklan - RentalYuk')
-
-@section('page-content')
-<main class="min-h-screen w-full animated-silver-black-bg font-sans flex items-center justify-center py-12 px-4">
-    
-  <div class="max-w-6xl w-full mx-auto relative rounded-2xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 p-1 shadow-2xl animated-border">
-    <div class="w-full h-full bg-gradient-to-br from-white to-slate-50 rounded-[15px] p-8 md:p-12">
-      
-      <div class="text-center mb-10 animate-on-scroll">
-        <h1 class="text-4xl font-extrabold text-gray-900">Pilih Paket Iklan Terbaik Anda</h1>
-        <p class="text-gray-500 mt-2">Tingkatkan visibilitas kendaraan Anda dan jangkau lebih banyak penyewa.</p>
-      </div>
+<body>
+  <main class="min-h-screen w-full animated-silver-black-bg font-sans flex items-center justify-center py-12 px-4">
+  {{-- Kontainer putih untuk membungkus konten --}}
+  <div class="max-w-4xl w-full mx-auto bg-white rounded-2xl shadow-2xl p-8 md:p-12">
+    <div class="text-center mb-10 animate-on-scroll">
+      <h1 class="text-4xl font-extrabold text-gray-900">Pilih Paket Iklan Anda</h1>
+      <p class="text-gray-500 mt-2">Tingkatkan visibilitas kendaraan Anda dan jangkau lebih banyak penyewa.</p>
+    </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
 
@@ -84,9 +88,9 @@
     </div>
   </div>
 </main>
-@endsection
+@include('admin.components.status_popup')
+<body>
 
-@section('custom-css')
 <style>
   .animated-silver-black-bg {
     background: linear-gradient(-45deg, #111827, #4b5563, #d1d5db, #374151);
@@ -123,9 +127,7 @@
   .delay-200 { transition-delay: 0.2s; }
   .delay-300 { transition-delay: 0.3s; }
 </style>
-@endsection
 
-@section('custom-js')
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
@@ -142,4 +144,3 @@
     });
   });
 </script>
-@endsection

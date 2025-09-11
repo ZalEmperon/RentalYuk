@@ -101,19 +101,26 @@
                   class="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5">
               </div>
             </div>
-            <div class="mb-5">
-              <label for="adsQuota" class="block mb-2 text-sm font-medium text-gray-900">Kuota Jumlah Periklanan</label>
-              <input type="number" id="adsQuota" name="quota_ads"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="Masukan Kuota Iklan Kendaraan" required />
+            <div class="flex flex-col md:flex-row md:justify-between">
+              <div class="mb-5 md:w-100 md:pe-2">
+                <label for="adsQuota" class="block mb-2 text-sm font-medium text-gray-900">Kuota Jumlah Periklanan</label>
+                <input type="number" id="adsQuota" name="quota_ads"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  placeholder="Masukan Kuota Iklan Kendaraan" required />
+              </div>
+              <div class="mb-5 md:w-100 md:ps-2">
+                <label for="adsTime" class="block mb-2 text-sm font-medium text-gray-900">Waktu Berlaku Paket</label>
+                <input type="number" id="adsTime" name="duration_days"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  placeholder="Berlaku selamanya jika tidak diisi"/>
+              </div>
             </div>
             <div class="mb-5">
-              <label for="adsTime" class="block mb-2 text-sm font-medium text-gray-900">Waktu Berlaku Paket</label>
-              <input type="number" id="adsTime" name="duration_days"
+              <label for="adsTime" class="block mb-2 text-sm font-medium text-gray-900">Deskripsi Singkat</label>
+              <textarea id="adsDesc" name="description"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="Berlaku selamanya jika tidak diisi"/>
+                placeholder="Teks singkat mengenai Paket tersebut"></textarea>
             </div>
-
           </div>
           <!-- Modal footer -->
           <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b">
@@ -147,6 +154,7 @@
       document.getElementById('adsPrice').value = v.price;
       document.getElementById('adsQuota').value = v.quota_ads;
       document.getElementById('adsTime').value = v.duration_days;
+      document.getElementById('adsDesc').innerText = v.description;
 
       let form = document.getElementById('planForm');
       const input = document.createElement("input");

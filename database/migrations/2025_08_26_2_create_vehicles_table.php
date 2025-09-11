@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('transmission');
             $table->string('capacity');
             $table->string('fuel_type');
-            $table->string('view_count')->default(0);
+            $table->integer('view_count')->default(0);
             $table->text('address');
             $table->enum('status', ['active', 'inactive'])->default('inactive');
             $table->enum('mod_status', ['approve', 'waiting', 'reject'])->default('waiting');

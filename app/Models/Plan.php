@@ -11,6 +11,7 @@ class Plan extends Model
         'price',
         'quota_ads',
         'duration_days',
+        'description'
     ];
 
     // Relationships

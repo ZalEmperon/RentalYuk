@@ -1,5 +1,5 @@
 <!-- Header -->
-<header class="bg-white shadow-md flex justify-between items-center p-4">
+<header class="bg-white shadow-md flex justify-between items-center p-2 px-4">
   <button data-drawer-target="default-sidebar" data-drawer-toggle="default-sidebar" aria-controls="default-sidebar"
     type="button"
     class="inline-flex items-center p-2 mt-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200">
@@ -12,8 +12,8 @@
   </button>
   <h1 class="text-xl font-semibold text-gray-800">Selamat Datang, {{ auth()->user()->name }}</h1>
   <div class="flex items-center space-x-4">
-    <span class="text-sm">Paket: <span class="font-semibold text-indigo-600">{{ session('plan') }}</span></span>
-    <img class="h-10 w-10 rounded-full object-cover" src="https://placehold.co/100x100/667eea/ffffff?text=B"
-      alt="User avatar">
+    <a href="/owner/pricing" class="text-sm p-4">Paket: <span class="font-semibold text-indigo-600">{{ session('plan') }}</span></a>
+    {{-- <img class="h-10 w-10 rounded-full object-cover" src="https://placehold.co/100x100/667eea/ffffff?text=B"
+      alt="User avatar"> --}}
   </div>
 </header>

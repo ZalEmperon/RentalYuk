@@ -54,12 +54,14 @@ class AdminController extends Controller
             'price' => 'nullable|string',
             'quota_ads' => 'required|string|max:2',
             'duration_days' => 'nullable|string|max:2',
+            'description' => 'required|string',
         ]);
         Plan::create([
             'name' => $request->name,
             'price' => $request->price ?? null,
             'quota_ads' => $request->quota_ads,
             'duration_days' => $request->duration_days ?? null,
+            'description' => $request->description
         ]);
         return redirect('/admin/paket')->with(['status' => "Paket Berhasil Ditambahkan"]);
     }
@@ -70,12 +72,14 @@ class AdminController extends Controller
             'price' => 'nullable|string',
             'quota_ads' => 'required|string|max:2',
             'duration_days' => 'nullable|string|max:2',
+            'description' => 'required|string',
         ]);
         $planData = Plan::findOrFail($id);
         $planData->name = $request->name;
         $planData->price = $request->price ?? null;
         $planData->quota_ads = $request->quota_ads;
         $planData->duration_days = $request->duration_days ?? null;
+        $planData->description = $request->description;
         $planData->save();
         return redirect('/admin/paket')->with(['status' => "Paket ". $planData->name. " Berhasil Diperbarui"]);
     }

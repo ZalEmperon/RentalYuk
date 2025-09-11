@@ -26,7 +26,7 @@ class AuthController extends Controller
             [
                 'name' => 'required|string|max:255',
                 'email' => 'required|string|email|max:255|unique:users',
-                'phone' => 'nullable|string|max:20',
+                'phone' => 'required|string|max:20|unique:users',
                 'password' => 'required|string|min:8|confirmed',
             ],
             [
@@ -60,7 +60,9 @@ class AuthController extends Controller
             ->join('user_plans', 'user_plans.plan_id', '=', 'plans.id')
             ->where('user_plans.user_id', $user->id)
             ->select('plans.name')->first();
-        session(['plan' => $plan->name]);
+        if($plan){
+            session(['plan' => $plan->name]);
+        }
         if (!is_null($user->email_verified_at)) {
             return redirect('/owner/dashboard');
         }
@@ -94,7 +96,9 @@ class AuthController extends Controller
                 ->join('user_plans', 'user_plans.plan_id', '=', 'plans.id')
                 ->where('user_plans.user_id', Auth::user()->id)
                 ->select('plans.name')->first();
-            session(['plan' => $plan->name]);
+            if($plan){
+                session(['plan' => $plan->name]);
+            }
             if (!is_null(Auth::user()->email_verified_at)) {
                 if (Auth::user()->role === 'owner') {
                     return redirect('/owner/dashboard');

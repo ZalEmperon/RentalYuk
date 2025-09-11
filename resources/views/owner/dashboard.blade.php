@@ -38,8 +38,8 @@
 
     <!-- Daftar Iklan -->
     <div class="mt-8 bg-white rounded-lg shadow-lg">
-      <div class="p-6 flex justify-between items-center border-b">
-        <h2 class="text-xl font-semibold text-gray-800">Daftar Iklan Anda</h2>
+      <div class="p-6 flex flex-col sm:flex-row sm:justify-between items-start sm:items-center border-b">
+        <h2 class="text-xl font-semibold text-gray-800 mb-2 sm:mb-0">Daftar Iklan Anda</h2>
         <a href="/owner/form-iklan"
           class="bg-indigo-600 text-white px-5 py-2 rounded-md hover:bg-indigo-700 font-semibold text-sm transition duration-300">
           + Tambah Iklan Baru
@@ -82,7 +82,7 @@
                       class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full {{ $data->status == 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' }}">{{ $data->status == 'active' ? 'Aktif' : 'Tidak Aktif' }}</span>
                   @endif
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-3">
                   <a href="/owner/form-iklan/edit/{{ $data->id }}"
                     class="text-indigo-600 hover:text-indigo-900">Edit</a>
                   <button type="button" data-modal-target="popup-modal" data-modal-toggle="popup-modal"
@@ -94,6 +94,13 @@
                       <button type="submit"
                         class="text-yellow-600 {{ $data->status == 'active' ? 'hover:text-green-900' : 'hover:text-yellow-900' }}">
                         {{ $data->status == 'active' ? 'Aktifkan' : 'Nonaktifkan' }}</button>
+                    </form>
+                  @elseif ($data->mod_status == 'reject')
+                    <form action="/owner/ad-resubmit/{{ $data->id }}" method="POST" class="inline">
+                      @csrf
+                      @method('PUT')
+                      <button type="submit" class="text-green-600 hover:text-green-900">
+                        Ajukan Kembali</button>
                     </form>
                   @endif
                 </td>

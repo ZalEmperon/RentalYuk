@@ -1,156 +1,132 @@
 @extends('client.components.base')
 
-@section('title', 'Detail ' . $vehicle->brand . ' ' . $vehicle->model)
-
+@section('title', 'Detail ' . $vehicleData->brand . ' ' . $vehicleData->model)
 
 @section('page-content')
-<main class="bg-slate-50 py-8">
-  <div class="container mx-auto px-6">
-    {{-- Breadcrumb Navigation --}}
-    <nav class="text-sm mb-4 animate-on-scroll">
+  <main class="container mx-auto px-6 py-8">
+    <nav class="text-sm mb-4">
       <a href="/" class="text-indigo-600 hover:underline">Home</a>
       <span class="mx-2 text-gray-500">/</span>
-      <span class="text-gray-700">{{ $vehicle->brand }} {{ $vehicle->model }}</span>
+      <span class="text-gray-700">{{ $vehicleData->brand }} {{ $vehicleData->model }}</span>
     </nav>
 
-    {{-- Kartu Utama dengan Efek Kaca --}}
-    <div class="bg-white/60 backdrop-blur-xl p-6 md:p-8 rounded-2xl shadow-lg border border-white/20">
+    <div class="bg-white p-6 md:p-8 rounded-lg shadow-lg">
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
-        {{-- Kolom Kiri: Galeri Gambar --}}
-        <div class="lg:col-span-2 animate-on-scroll delay-100">
+        <div class="lg:col-span-2">
           {{-- Gambar Utama --}}
-          <div class="relative overflow-hidden rounded-lg shadow-md mb-4 group">
-            <img id="main-image" src="{{ $vehicle->main_photo_url ? asset('storage/photo/' . $vehicle->type . '/' . $vehicle->main_photo_url) : 'https://placehold.co/800x500/gray/ffffff?text=No+Image' }}" alt="{{ $vehicle->brand }} - Tampilan Utama" class="w-full h-auto aspect-[4/3] object-cover transition-transform duration-500 group-hover:scale-105">
-            <div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-300"></div>
-          </div>
+          <img id="main-image"
+            src="{{ $vehicleData->photos->isNotEmpty() ? asset('storage/photo/' . $vehicleData->type . '/' . $vehicleData->photos->first()->photo_url) : 'https://placehold.co/800x500/gray/ffffff?text=No+Image' }}"
+            alt="{{ $vehicleData->brand }} - Tampilan Utama"
+            class="w-full h-auto rounded-lg shadow-md mb-4 aspect-[4/3] object-cover cursor-pointer hover:border-2 hover:border-indigo-500 aspect-video object-cover transition-all duration-300 transform hover:scale-105 transition-transform duration-500">
 
           {{-- Thumbnail --}}
-          @if($vehicle->photos->isNotEmpty())
-          <div class="grid grid-cols-4 gap-4">
-            @foreach($vehicle->photos as $photo)
-            <div class="overflow-hidden rounded-lg">
-                <img src="{{ asset('storage/photo/' . $vehicle->type . '/' . $photo->photo_url) }}" alt="Thumbnail {{ $loop->iteration }}" class="thumbnail-image w-full h-auto cursor-pointer border-2 border-transparent hover:border-indigo-500 aspect-video object-cover transition-all duration-300 transform hover:scale-110">
+          @if ($vehicleData->photos->isNotEmpty())
+            <div class="grid grid-cols-4 gap-4">
+              @foreach ($vehicleData->photos as $photo)
+                <img src="{{ asset('storage/photo/' . $vehicleData->type . '/' . $photo->photo_url) }}"
+                  alt="Thumbnail {{ $loop->iteration }}"
+                  class="thumbnail-image w-full h-auto rounded-lg cursor-pointer hover:border-2 hover:border-indigo-500 aspect-video object-cover transition-all duration-300 transform hover:scale-110 transition-transform duration-500">
+              @endforeach
             </div>
-            @endforeach
-          </div>
           @endif
         </div>
 
-        {{-- Kolom Kanan: Detail Kendaraan --}}
-        <div class="lg:col-span-1 animate-on-scroll delay-200">
-          <h1 class="text-3xl font-bold text-gray-900">{{ $vehicle->brand }} {{ $vehicle->model }}</h1>
-          <p class="text-gray-600 mt-1"><strong>Lokasi:</strong> {{ $vehicle->city }}</p>
+        <div class="lg:col-span-1">
+          <h1 class="text-3xl font-bold text-gray-900">{{ $vehicleData->brand }} {{ $vehicleData->model }}</h1>
+          <p class="text-gray-600 mt-1"><strong>Lokasi:</strong> {{ $vehicleData->city }}</p>
 
-          {{-- Spesifikasi --}}
-          <div class="mt-6 p-4 bg-slate-50 rounded-lg border animate-on-scroll delay-300">
-            <h2 class="text-xl font-semibold mb-3 text-gray-800">Spesifikasi</h2>
+          <div class="mt-6">
+            <h2 class="text-xl font-semibold mb-3">Spesifikasi</h2>
             <div class="grid grid-cols-2 gap-4 text-sm">
-              <div class="flex items-center text-gray-700"><svg class="w-5 h-5 mr-2 text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" /></svg><span>{{ $vehicle->transmission }}</span></div>
-              <div class="flex items-center text-gray-700"><svg class="w-5 h-5 mr-2 text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-4.663M3.75 12.16c0-1.113.285-2.16.786-3.07M3.75 12.16l-.001.109A12.318 12.318 0 008.624 3c2.331 0 4.512.645 6.374 1.766l.001.109a6.375 6.375 0 00-11.964 4.663z" /></svg><span>{{ $vehicle->capacity }} Kursi</span></div>
-              <div class="flex items-center text-gray-700"><svg class="w-5 h-5 mr-2 text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0h18M-4.5 12h22.5" /></svg><span>{{ $vehicle->year }}</span></div>
-              <div class="flex items-center text-gray-700"><svg class="w-5 h-5 mr-2 text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.125-.504 1.125-1.125V14.25m-17.25 4.5h16.5M5.625 13.5a1.875 1.875 0 10-3.75 0v1.125c0 .621.504 1.125 1.125 1.125h1.5v1.125c0 .621.504 1.125 1.125 1.125h1.5a1.125 1.125 0 01-1.125-1.125V13.5z" /></svg><span>{{ $vehicle->fuel_type }}</span></div>
+
+              {{-- Icon Transmisi --}}
+              <div class="flex items-center text-gray-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-indigo-500" fill="currentColor"
+                  viewBox="0 0 16 16">
+                  <path
+                    d="M7.068.727c.243-.97 1.62-.97 1.864 0l.071.286a.96.96 0 0 0 1.622.434l.205-.211c.695-.719 1.888-.03 1.613.931l-.08.284a.96.96 0 0 0 1.187 1.187l.283-.081c.96-.275 1.65.918.931 1.613l-.211.205a.96.96 0 0 0 .434 1.622l.286.071c.97.243.97 1.62 0 1.864l-.286.071a.96.96 0 0 0-.434 1.622l.211.205c.719.695.03 1.888-.931 1.613l-.284-.08a.96.96 0 0 0-1.187 1.187l.081.283c.275.96-.918 1.65-1.613.931l-.205-.211a.96.96 0 0 0-1.622.434l-.071.286c-.243.97-1.62.97-1.864 0l-.071-.286a.96.96 0 0 0-1.622-.434l-.205.211c-.695.719-1.888.03-1.613-.931l.08-.284a.96.96 0 0 0-1.186-1.187l-.284.081c-.96.275-1.65-.918-.931-1.613l.211-.205a.96.96 0 0 0-.434-1.622l-.286-.071c-.97-.243-.97-1.62 0-1.864l.286-.071a.96.96 0 0 0 .434-1.622l-.211-.205c-.719-.695-.03-1.888.931-1.613l.284.08a.96.96 0 0 0 1.187-1.186l-.081-.284c-.275-.96.918-1.65 1.613-.931l.205.211a.96.96 0 0 0 1.622-.434zM12.973 8.5H8.25l-2.834 3.779A4.998 4.998 0 0 0 12.973 8.5m0-1a4.998 4.998 0 0 0-7.557-3.779l2.834 3.78zM5.048 3.967l-.087.065zm-.431.355A4.98 4.98 0 0 0 3.002 8c0 1.455.622 2.765 1.615 3.678L7.375 8zm.344 7.646.087.065z" />
+                </svg>
+                <span>Transmisi: {{ $vehicleData->transmission }}</span>
+              </div>
+
+              {{-- Icon Kapasitas --}}
+              <div class="flex items-center text-gray-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-indigo-500" fill="currentColor"
+                  viewBox="0 0 16 16">
+                  <path
+                    d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5" />
+                </svg>
+                <span>Kapasitas: {{ $vehicleData->capacity }} Kursi</span>
+              </div>
+
+              {{-- Icon Tahun --}}
+              <div class="flex items-center text-gray-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-indigo-500" fill="currentColor"
+                  viewBox="0 0 16 16">
+                  <path
+                    d="M4 .5a.5.5 0 0 0-1 0V1H2a2 2 0 0 0-2 2v1h16V3a2 2 0 0 0-2-2h-1V.5a.5.5 0 0 0-1 0V1H4zM16 14V5H0v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2M9.5 7h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5m3 0h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5M2 10.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3.5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5" />
+                </svg>
+                <span>Tahun: {{ $vehicleData->year }}</span>
+              </div>
+
+              {{-- Icon Bahan Bakar --}}
+              <div class="flex items-center text-gray-700">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-5 h-5 mr-2 text-indigo-500"
+                  viewBox="0 0 16 16">
+                  <path
+                    d="M1 2a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v8a2 2 0 0 1 2 2v.5a.5.5 0 0 0 1 0V8h-.5a.5.5 0 0 1-.5-.5V4.375a.5.5 0 0 1 .5-.5h1.495c-.011-.476-.053-.894-.201-1.222a.97.97 0 0 0-.394-.458c-.184-.11-.464-.195-.9-.195a.5.5 0 0 1 0-1q.846-.002 1.412.336c.383.228.634.551.794.907.295.655.294 1.465.294 2.081V7.5a.5.5 0 0 1-.5.5H15v4.5a1.5 1.5 0 0 1-3 0V12a1 1 0 0 0-1-1v4h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1zm2.5 0a.5.5 0 0 0-.5.5v5a.5.5 0 0 0 .5.5h5a.5.5 0 0 0 .5-.5v-5a.5.5 0 0 0-.5-.5z" />
+                </svg>
+                <span>Bahan Bakar: {{ $vehicleData->fuel_type }}</span>
+              </div>
+
             </div>
           </div>
-
-          {{-- Alamat & Deskripsi --}}
-          <div class="mt-6 animate-on-scroll delay-400">
+          <div class="mt-6">
             <h2 class="text-xl font-semibold mb-2">Alamat Lengkap</h2>
-            <p class="text-gray-600 text-sm leading-relaxed">{{ $vehicle->address }}</p>
-          </div>
-          <div class="mt-6 animate-on-scroll delay-500">
-            <h2 class="text-xl font-semibold mb-2">Deskripsi</h2>
-            <p class="text-gray-600 text-sm leading-relaxed">{{ $vehicle->description }}</p>
+            <p class="text-gray-600 text-sm leading-relaxed">{{ $vehicleData->address }}</p>
           </div>
 
-          {{-- Kotak Harga dan Tombol WhatsApp --}}
-          <div class="mt-6 bg-gradient-to-br from-indigo-50 to-purple-100 p-6 rounded-lg animate-on-scroll delay-600">
-            <p class="text-2xl font-bold text-indigo-600">Rp {{ number_format($vehicle->price_per_day, 0, ',', '.') }} <span class="text-base font-normal text-gray-600">/ hari</span></p>
-            <a href="https://wa.me/{{ $vehicle->user->phone }}?text=Halo, saya tertarik untuk menyewa {{ $vehicle->brand }} {{ $vehicle->model }} dari RentalYuk." target="_blank"
-               class="w-full mt-4 bg-gradient-to-r from-green-500 to-teal-500 text-white py-3 rounded-lg font-semibold text-lg hover:from-green-600 hover:to-teal-600 transition-all duration-300 flex items-center justify-center shadow-lg hover:shadow-xl transform hover:scale-105">
-              <svg class="w-6 h-6 mr-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 14c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.2-.6.7-.8.9-.1.1-.3.2-.5.1-.2-.1-.9-.3-1.8-1.1-.7-.6-1.1-1.4-1.3-1.6-.1-.2 0-.4.1-.5.1-.1.2-.3.4-.4.1-.1.2-.2.2-.3.1-.1.1-.3 0-.4-.1-.1-1.2-2.8-1.6-3.8-.4-.9-.8-.8-1.1-.8-.3 0-.6-.1-.8-.1-.2 0-.6.1-.9.4-.3.3-1.2 1.1-1.2 2.7 0 1.6 1.2 3.1 1.4 3.3.2.2 2.4 3.7 5.8 5.1.8.3 1.4.5 1.9.7.8.2 1.5.2 2.1.1.7-.1 2.2-1.1 2.5-2.1.3-.9.3-1.7.2-1.9-.1-.2-.4-.3-.6-.4zM12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zM9.1 17.5c-1-1.8-1.6-3.6-1.6-5.4 0-3.3 2.7-6 6-6 1.7 0 3.3.7 4.5 1.9s1.9 2.9 1.9 4.5c0 .1 0 .2 0 .3l-1.9-1.9c-.4-.4-1-.4-1.4 0-.4.4-.4 1 0 1.4l2.6 2.6c.2.2.4.3.7.3.3 0 .5-.1.7-.3l2.6-2.6c.4-.4.4-1 0-1.4s-1-.4-1.4 0l-1.9 1.9c0-.1 0-.2 0-.3 0-2.4-2-4.4-4.4-4.4-2.4 0-4.4 2-4.4 4.4 0 1.8.6 3.5 1.5 4.9.4.5 1 .6 1.5.2.5-.4.6-1 .2-1.5z"></path></svg>
+          <div class="mt-6">
+            <h2 class="text-xl font-semibold mb-2">Deskripsi</h2>
+            <p class="text-gray-600 text-sm leading-relaxed">{{ $vehicleData->description }}</p>
+          </div>
+
+          <div class="mt-6 bg-indigo-50 p-6 rounded-lg">
+            <p class="text-2xl font-bold text-indigo-600">Rp
+              {{ number_format($vehicleData->price_per_day, 0, ',', '.') }} <span
+                class="text-base font-normal text-gray-600">/ hari</span></p>
+            <a href="https://wa.me/{{ $vehicleData->user->phone }}?text=Halo, saya tertarik untuk menyewa {{ $vehicleData->brand }} {{ $vehicleData->model }} dari RentalYuk."
+              target="_blank"
+              class="w-full mt-4 bg-green-500 text-white py-3 rounded-lg font-semibold text-lg hover:bg-green-600 transition duration-300 flex items-center justify-center">
+              <svg class="w-6 h-6 mr-2" ...></svg>
               Hubungi via WhatsApp
             </a>
-            <p class="text-xs text-center text-gray-500 mt-3">Anda akan diarahkan ke WhatsApp pemilik: <strong>{{ $vehicle->user->name }}</strong></p>
+            <p class="text-xs text-center text-gray-500 mt-3">Anda akan diarahkan ke WhatsApp pemilik:
+              <strong>{{ $vehicleData->user->name }}</strong>
+            </p>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</main>
+  </main>
 @endsection
-
-
-@section('custom-css')
-<style>
-  /* Keyframes untuk animasi fade-in saat elemen terlihat */
-  @keyframes fadeInUpx {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* Kelas untuk elemen yang akan dianimasikan saat scroll */
-  .animate-on-scroll {
-    opacity: 0; /* Mulai dari transparan */
-    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-    transform: translateY(30px); /* Posisi awal sebelum animasi */
-  }
-
-  /* Kelas yang ditambahkan oleh JS saat elemen terlihat */
-  .is-visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  
-  /* Kelas utilitas untuk delay animasi */
-  .delay-100 { transition-delay: 0.1s; }
-  .delay-200 { transition-delay: 0.2s; }
-  .delay-300 { transition-delay: 0.3s; }
-  .delay-400 { transition-delay: 0.4s; }
-  .delay-500 { transition-delay: 0.5s; }
-  .delay-600 { transition-delay: 0.6s; }
-</style>
-@endsection
-
 
 @section('custom-js')
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // --- FUNGSI 1: GALERI GAMBAR THUMBNAIL ---
-    const mainImage = document.getElementById('main-image');
-    const thumbnails = document.querySelectorAll('.thumbnail-image');
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const mainImage = document.getElementById('main-image');
+      const thumbnails = document.querySelectorAll('.thumbnail-image');
 
-    thumbnails.forEach(thumbnail => {
-      thumbnail.addEventListener('click', function() {
-        // Ganti gambar utama
-        mainImage.src = this.src;
+      thumbnails.forEach(thumbnail => {
+        thumbnail.addEventListener('click', function() {
+          // Ganti gambar utama dengan gambar thumbnail yang diklik
+          mainImage.src = this.src;
 
-        // Atur style border untuk menandai thumbnail aktif
-        thumbnails.forEach(t => t.classList.remove('border-indigo-500'));
-        this.classList.add('border-indigo-500');
+          // Atur style border untuk menandai thumbnail aktif
+          thumbnails.forEach(t => t.classList.remove('border-2', 'border-indigo-500'));
+          this.classList.add('border-2', 'border-indigo-500');
+        });
       });
     });
-
-    // --- FUNGSI 2: ANIMASI "POP OUT" SAAT SCROLL ---
-    const observerOptions = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.1 // Picu saat 10% elemen terlihat
-    };
-
-    const observer = new IntersectionObserver((entries, observer) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-          observer.unobserve(entry.target); // Hentikan observasi setelah animasi berjalan
-        }
-      });
-    }, observerOptions);
-
-    // Amati semua elemen dengan kelas `.animate-on-scroll`
-    document.querySelectorAll('.animate-on-scroll').forEach(element => {
-      observer.observe(element);
-    });
-  });
-</script>
+  </script>
 @endsection

@@ -36,6 +36,14 @@ class OwnerController extends Controller
         return redirect('/owner/dashboard')
             ->with(['status' => '' . $adData->brand . ' ' . $adData->model . ' Telah ' . ($adData->status == 'active' ? 'diaktifkan, iklan ditampilkan' : 'dinonaktifkan, iklan tidak ditampilkan')]);
     }
+    public function ownerResubmitIklan($id)
+    {
+        $adData = Vehicle::findOrFail($id);
+        $adData->mod_status = 'waiting';
+        $adData->save();
+        return redirect('/owner/dashboard')
+            ->with(['status' => '' . $adData->brand . ' ' . $adData->model . ' Telah diajukan kembali dan sedang menunggu persetujuan dari Admin']);
+    }
     public function ownerAturPaket(Request $request)
     {
         $request->validate(
@@ -60,8 +68,23 @@ class OwnerController extends Controller
             ->join('user_plans', 'user_plans.plan_id', '=', 'plans.id')
             ->where('user_plans.user_id', Auth::user()->id)
             ->select('plans.name')->first();
-        session(['plan' => $plan->name]);
+        if($plan){
+            session(['plan' => $plan->name]);
+        }
         return redirect('/owner/dashboard')->with(['status' => 'Persiapan Periklanan Sudah Siap']);
+    }
+    public function ownerTampilTambahIklan()
+    {
+        $quotaValid = DB::table('user_plans')->join('plans', 'user_plans.plan_id', '=', 'plans.id')
+            ->join('vehicles', 'user_plans.user_id', '=', 'vehicles.user_id')
+            ->where('user_plans.user_id', Auth::user()->id)
+            ->select('plans.name', 'plans.quota_ads', DB::raw('COUNT(vehicles.id) as jumlah_iklan'))
+            ->groupBy('plans.quota_ads', 'plans.name')->first();
+        if($quotaValid->jumlah_iklan >= $quotaValid->quota_ads){
+            return redirect('/owner/dashboard')->withErrors(['status' => 'Kuota iklan '. $quotaValid->name .' Anda sudah habis. Silakan upgrade ke paket yang lebih tinggi untuk memasang lebih banyak iklan.']);
+        }else{
+            return view('owner.form_iklan');
+        }
     }
 
     public function ownerTambahIklan(Request $request)
@@ -100,7 +123,7 @@ class OwnerController extends Controller
             'photo.*' => 'nullable|image|mimes:jpeg,png,jpg|max:4096',
         ]);
 
-        $userPlanCheck = DB::table('user_plans')->where('user_id', Auth::user()->id)->select('plan_id')->first();
+        $userPlanCheck = UserPlan::where('user_id', Auth::user()->id)->select('plan_id')->first();
         $is_premium = $userPlanCheck && $userPlanCheck->plan_id > 1 ? 1 : 0;
 
         $kendaraan = Vehicle::create([

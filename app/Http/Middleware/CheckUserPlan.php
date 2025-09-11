@@ -19,7 +19,7 @@ class CheckUserPlan
     {
         $user = UserPlan::where('user_id', Auth::user()->id)->first();
         if (!$user && Auth::user()->role === 'owner') {
-            return redirect('/owner/pricing')->with('error', 'Anda harus memilih paket terlebih dahulu.');
+            return redirect('/owner/pricing')->withErrors('status', 'Anda harus memilih paket terlebih dahulu.');
         }
         return $next($request);
     }

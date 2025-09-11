@@ -178,7 +178,7 @@
         const id = btn.getAttribute('data-id');
         const v = vehicles.find(item => item.id == id);
         // Fill basic info
-        document.getElementById('detailName').innerText = v.user.name ?? '';
+        document.getElementById('detailName').innerText = `${v.brand} ${v.model}` ?? '';
         document.getElementById('detailBrand').innerText = v.brand ?? '';
         document.getElementById('detailModel').innerText = v.model ?? '';
         document.getElementById('detailYear').innerText = v.year ?? '';

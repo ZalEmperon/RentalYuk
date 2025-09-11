@@ -6,23 +6,12 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OwnerController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ClientController;
 
-Route::get('/', [HomeController::class, 'index']);
-
-// Route::get('/', function () {
-//     return view('client.home');
-// });
-
-Route::get('/pencarian', function () {
-    return view('client.hasil_pencarian');
-});
-
-// Route::get('/detail', function () {
-//     return view('client.detail_kendaraan');
-// });
-
-Route::get('/detail/{id}', [HomeController::class, 'show']);
+Route::get('/', [ClientController::class, 'clientTampilHome']);
+Route::get('/detail/{id}', [ClientController::class, 'clientTampilDetail']);
+Route::get('/sewa-{type}-{city}', [ClientController::class, 'clientTampilPencarian']);
+// Route::get('/sewa-{type}-{city}', function () {return view('client.hasil_pencarian');});
 
 // Halaman/Fungsi yang bisa diakses jika belum masuk / login
 Route::middleware('guest')->group(function () {
@@ -89,10 +78,9 @@ Route::middleware(['auth'])->group(function () {
             Route::middleware('planless')->group(function () {
                 Route::get('/dashboard', [OwnerController::class, 'ownerTampilDashboard']);
                 Route::put('/ad-switch/{id}', [OwnerController::class, 'ownerStatusIklan']);
+                Route::put('/ad-resubmit/{id}', [OwnerController::class, 'ownerResubmitIklan']);
 
-                Route::get('/form-iklan', function () {
-                    return view('owner.form_iklan');
-                });
+                Route::get('/form-iklan', [OwnerController::class, 'ownerTampilTambahIklan']);
                 Route::post('/form-iklan', [OwnerController::class, 'ownerTambahIklan']);
                 Route::get('/form-iklan/edit/{id}', [OwnerController::class, 'ownerTampilEditIklan']);
                 Route::put('/form-iklan/edit/{id}', [OwnerController::class, 'ownerEditIklan']);
