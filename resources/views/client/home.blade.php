@@ -54,7 +54,7 @@
         <p class="mt-2 text-gray-600 animate-on-scroll delay-100">Kami memberikan yang terbaik untuk perjalanan Anda.</p>
       </div>
       <div class="grid md:grid-cols-3 gap-8 text-center">
-        <div class="p-8 bg-slate-50 rounded-xl shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 animate-on-scroll delay-200">
+        <div class="p-8 bg-slate-50 rounded-xl shadow-md hover:shadow-2xl transition-all duration-300 transform hover:scale-110 transition-transform duration-500">
           <div class="flex items-center justify-center h-16 w-16 rounded-full bg-indigo-100 text-indigo-600 mx-auto mb-4 icon-animation">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v.01" />
@@ -63,7 +63,7 @@
           <h3 class="text-xl font-semibold mb-2">Harga Terbaik</h3>
           <p class="text-gray-600">Dapatkan penawaran harga sewa paling kompetitif tanpa biaya tersembunyi.</p>
         </div>
-        <div class="p-8 bg-slate-50 rounded-xl shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 animate-on-scroll delay-300">
+        <div class="p-8 bg-slate-50 rounded-xl shadow-md hover:shadow-2xl transition-all duration-300 transform hover:scale-110 transition-transform duration-500">
           <div class="flex items-center justify-center h-16 w-16 rounded-full bg-indigo-100 text-indigo-600 mx-auto mb-4 icon-animation">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
@@ -72,7 +72,7 @@
           <h3 class="text-xl font-semibold mb-2">Banyak Pilihan</h3>
           <p class="text-gray-600">Dari mobil keluarga hingga motor lincah, temukan kendaraan sesuai kebutuhan Anda.</p>
         </div>
-        <div class="p-8 bg-slate-50 rounded-xl shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 animate-on-scroll delay-400">
+        <div class="p-8 bg-slate-50 rounded-xl shadow-md hover:shadow-2xl transition-all duration-300 transform hover:scale-110 transition-transform duration-500">
           <div class="flex items-center justify-center h-16 w-16 rounded-full bg-indigo-100 text-indigo-600 mx-auto mb-4 icon-animation">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -92,7 +92,7 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {{-- Card Mobil --}}
         @foreach ($mobil as $data)
-<div class="bg-white rounded-xl shadow-lg overflow-hidden group animate-on-scroll delay-{{ $loop->iteration * 100 }}">
+<div class="bg-white rounded-xl shadow-lg overflow-hidden group animate-on-scroll flex flex-col transform hover:scale-110 transition-transform duration-500">
   <div class="overflow-hidden">
     <img src="{{ $data->main_photo_url ? asset('storage/photo/' . $data->type . '/' . $data->main_photo_url) : 'https://placehold.co/600x400/3498db/ffffff?text=No+Image' }}" alt="{{ $data->brand }} {{ $data->model }}" class="w-full h-56 object-cover transform group-hover:scale-110 transition-transform duration-700 ease-in-out">
   </div>
@@ -122,7 +122,7 @@
        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {{-- Card Motor --}}
         @foreach ($motor as $data)
-<div class="bg-white rounded-xl shadow-lg overflow-hidden group animate-on-scroll delay-{{ $loop->iteration * 100 }}">
+<div class="bg-white rounded-xl shadow-lg overflow-hidden group animate-on-scroll flex flex-col transform hover:scale-110 transition-transform duration-500">
   <div class="overflow-hidden">
      <img src="{{ $data->main_photo_url ? asset('storage/photo/' . $data->type . '/' . $data->main_photo_url) : 'https://placehold.co/600x400/1abc9c/ffffff?text=No+Image' }}" alt="{{ $data->brand }} {{ $data->model }}" class="w-full h-56 object-cover transform group-hover:scale-110 transition-transform duration-700 ease-in-out">
   </div>
@@ -161,7 +161,7 @@
             </p>
           </div>
           <div class="overflow-hidden rounded-lg">
-            <img src="https://placehold.co/600x400/a5b4fc/ffffff?text=Tim+RentalYuk" alt="Tim Kami" class="w-full h-full object-cover rounded-lg shadow-md transform hover:scale-110 transition-transform duration-500">
+            <img src="{{ asset('assets/images/about-us.png') }}" alt="Tim Kami" class="w-full h-full object-cover rounded-lg shadow-md transform hover:scale-110 transition-transform duration-500">
           </div>
         </div>
       </div>

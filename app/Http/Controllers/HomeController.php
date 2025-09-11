@@ -28,4 +28,17 @@ class HomeController extends Controller
         // Kirim data mobil dan motor ke view
         return view('client.home', compact('mobil', 'motor'));
     }
+
+    public function show($id)
+    {
+        // Ambil data kendaraan spesifik berdasarkan ID,
+        // beserta relasi ke pemilik (user) dan foto-fotonya (photos)
+        $vehicle = Vehicle::with(['user', 'photos'])
+            ->where('status', 'active')
+            ->where('mod_status', 'approve')
+            ->findOrFail($id); // Gunakan findOrFail untuk otomatis menampilkan error 404 jika tidak ditemukan
+
+        // Kirim data kendaraan yang ditemukan ke view
+        return view('client.detail_kendaraan', compact('vehicle'));
+    }
 }

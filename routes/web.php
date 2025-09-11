@@ -18,9 +18,11 @@ Route::get('/pencarian', function () {
     return view('client.hasil_pencarian');
 });
 
-Route::get('/detail', function () {
-    return view('client.detail_kendaraan');
-});
+// Route::get('/detail', function () {
+//     return view('client.detail_kendaraan');
+// });
+
+Route::get('/detail/{id}', [HomeController::class, 'show']);
 
 // Halaman/Fungsi yang bisa diakses jika belum masuk / login
 Route::middleware('guest')->group(function () {
