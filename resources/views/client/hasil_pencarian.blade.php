@@ -8,89 +8,81 @@
       <nav class="text-sm mb-4">
         <a href="#" class="text-indigo-600 hover:underline">Home</a>
         <span class="mx-2 text-gray-500">/</span>
-        <span class="text-gray-700">Sewa Mobil di Surabaya</span>
+        <span class="text-gray-700">Sewa {{ $type }} di {{ $city }}</span>
       </nav>
-      <h1 class="text-3xl font-bold text-gray-900">Sewa Mobil di Surabaya</h1>
-      <p class="mt-2 text-gray-600">Menampilkan 12 hasil yang sesuai dengan pencarian Anda.</p>
+      <h1 class="text-3xl font-bold text-gray-900">Sewa {{ ucfirst($type) }} di {{ ucfirst($city) }}</h1>
+      <p class="mt-2 text-gray-600">Menampilkan {{ $searchCount }} hasil yang sesuai dengan pencarian Anda.</p>
     </div>
 
     <div class="mt-8 flex flex-col lg:flex-row gap-8">
       <!-- Kolom Filter -->
-            <aside class="w-full lg:w-1/4">
-          <div class="bg-white p-6 rounded-lg shadow-lg sticky top-28">
-              <h3 class="text-xl font-semibold mb-4 border-b pb-3">Filter Pencarian</h3>
+      <aside class="w-full lg:w-1/4">
+      <form action="" method="GET" class="bg-white p-6 rounded-lg shadow-lg sticky top-28">
+        <h3 class="text-xl font-semibold mb-4 border-b pb-3">Filter Pencarian</h3>
 
-              <div class="mb-6">
-                  <h4 class="font-semibold mb-3">Tipe Transmisi</h4>
-                  <div class="space-y-2">
-                      <label class="flex items-center">
-                          <input type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                          <span class="ml-2 text-gray-700">Manual</span>
-                      </label>
-                      <label class="flex items-center">
-                          <input type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                          <span class="ml-2 text-gray-700">Matic</span>
-                      </label>
-                  </div>
-              </div>
-
-              <div class="mb-6">
-                  <h4 class="font-semibold mb-3">Jenis Bahan Bakar</h4>
-                  <select id="fuel_type" name="fuel_type"
-                      class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                      <option value="">Semua Jenis</option>
-                      <option value="bensin">Bensin</option>
-                      <option value="diesel">Diesel</option>
-                      <option value="listrik">Listrik</option>
-                  </select>
-              </div>
-
-              <div class="mb-6">
-                  <h4 class="font-semibold mb-3">Rentang Harga</h4>
-                  <div class="grid grid-cols-2 gap-4">
-                      <div>
-                          <label for="min_price" class="block text-sm font-medium text-gray-700">Min Harga</label>
-                          <input type="number" name="min_price" id="min_price" placeholder="Rp 100.000"
-                              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                      </div>
-                      <div>
-                          <label for="max_price" class="block text-sm font-medium text-gray-700">Max Harga</label>
-                          <input type="number" name="max_price" id="max_price" placeholder="Rp 1.000.000"
-                              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                      </div>
-                  </div>
-              </div>
-
-              <div>
-                  <h4 class="font-semibold mb-3">Kapasitas Penumpang</h4>
-                  <div class="space-y-2">
-                      <label class="flex items-center">
-                          <input type="radio" name="kapasitas"
-                              class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-                          <span class="ml-2 text-gray-700">Semua</span>
-                      </label>
-                      <label class="flex items-center">
-                          <input type="radio" name="kapasitas"
-                              class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-                          <span class="ml-2 text-gray-700">2 - 4 orang</span>
-                      </label>
-                      <label class="flex items-center">
-                          <input type="radio" name="kapasitas"
-                              class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-                          <span class="ml-2 text-gray-700">5 - 7 orang</span>
-                      </label>
-                      <label class="flex items-center">
-                          <input type="radio" name="kapasitas"
-                              class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-                          <span class="ml-2 text-gray-700">&gt; 7 orang</span>
-                      </label>
-                  </div>
-              </div>
-
-              <button
-                  class="w-full mt-6 bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 transition duration-300">Terapkan
-                  Filter</button>
+          <div class="mb-6">
+            <h4 class="font-semibold mb-3">Tipe Transmisi</h4>
+            <div class="space-y-2">
+              <label class="flex items-center">
+                <input type="checkbox" name="transmission[]" value="Manual" class="..." {{ in_array('Manual', $old_input['transmission'] ?? []) ? 'checked' : '' }}>
+                <span class="ml-2 text-gray-700">Manual</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" name="transmission[]" value="Otomatis" class="..." {{ in_array('Otomatis', $old_input['transmission'] ?? []) ? 'checked' : '' }}>
+                <span class="ml-2 text-gray-700">Otomatis</span>
+              </label>
+            </div>
           </div>
+
+          <div class="mb-6">
+              <h4 class="font-semibold mb-3">Jenis Bahan Bakar</h4>
+              <select id="fuel_type" name="fuel_type" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                  <option value="">Semua Jenis</option>
+                  <option value="Bensin" {{ ($old_input['fuel_type'] ?? '') == 'Bensin' ? 'selected' : '' }}>Bensin</option>
+                  <option value="Solar (Diesel)" {{ ($old_input['fuel_type'] ?? '') == 'Solar (Diesel)' ? 'selected' : '' }}>Solar (Diesel)</option>
+                  <option value="Listrik" {{ ($old_input['fuel_type'] ?? '') == 'Listrik' ? 'selected' : '' }}>Listrik</option>
+                  <option value="Hybrid" {{ ($old_input['fuel_type'] ?? '') == 'Hybrid' ? 'selected' : '' }}>Hybrid</option>
+              </select>
+          </div>
+
+          <div class="mb-6">
+              <h4 class="font-semibold mb-3">Rentang Harga</h4>
+              <div class="space-y-4">
+                  <div>
+                      <label for="min_price" class="block text-sm font-medium text-gray-700">Min Harga</label>
+                      <input type="number" name="min_price" id="min_price" placeholder="Contoh: 100000" value="{{ $old_input['min_price'] ?? '' }}" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                  </div>
+                  <div>
+                      <label for="max_price" class="block text-sm font-medium text-gray-700">Max Harga</label>
+                      <input type="number" name="max_price" id="max_price" placeholder="Contoh: 1000000" value="{{ $old_input['max_price'] ?? '' }}" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                  </div>
+              </div>
+          </div>
+
+
+          <div>
+            <h4 class="font-semibold mb-3">Kapasitas Penumpang</h4>
+            <div class="space-y-2">
+              <label class="flex items-center">
+                <input type="radio" name="capacity" value="" class="..." {{ empty($old_input['capacity']) ? 'checked' : '' }}>
+                <span class="ml-2 text-gray-700">Semua</span>
+              </label>
+              <label class="flex items-center">
+                <input type="radio" name="capacity" value="2-4" class="..." {{ ($old_input['capacity'] ?? '') == '2-4' ? 'checked' : '' }}>
+                <span class="ml-2 text-gray-700">2 - 4 orang</span>
+              </label>
+              <label class="flex items-center">
+                <input type="radio" name="capacity" value="5-7" class="..." {{ ($old_input['capacity'] ?? '') == '5-7' ? 'checked' : '' }}>
+                <span class="ml-2 text-gray-700">5 - 7 orang</span>
+              </label>
+              <label class="flex items-center">
+                <input type="radio" name="capacity" value=">7" class="..." {{ ($old_input['capacity'] ?? '') == '>7' ? 'checked' : '' }}>
+                <span class="ml-2 text-gray-700">&gt; 7 orang</span>
+              </label>
+            </div>
+          </div>
+          <button type="submit" class="w-full mt-6 bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 transition duration-300">Terapkan Filter</button>
+        </form>
       </aside>
 
       <!-- Kolom Hasil Pencarian -->
@@ -145,41 +137,12 @@
                     <span>•</span>
                     <span>Bensin</span>
                   </div>
-                  <p class="text-gray-700 text-sm leading-relaxed">Mobil lincah dan irit bahan bakar, cocok untuk keliling
+                  <p class="text-gray-700 text-sm leading-relaxed">Mobil lincah dan irit bahan bakar, cocok untuk
+                    keliling
                     kota. Interior bersih dan wangi.</p>
                 </div>
                 <div class="flex justify-between items-center mt-4 pt-4 border-t">
                   <p class="text-lg font-bold text-indigo-600">Rp 300.000<span
-                      class="text-sm font-normal text-gray-500">/hari</span></p>
-                  <a href="#"
-                    class="bg-indigo-600 text-white px-5 py-2 rounded-md hover:bg-indigo-700 font-semibold text-sm transition duration-300">Lihat
-                    Detail</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Result Card 3 -->
-          <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-            <div class="flex flex-col md:flex-row">
-              <img src="https://placehold.co/400x300/2ecc71/ffffff?text=Xpander" alt="Mitsubishi Xpander"
-                class="w-full md:w-1/3 h-48 md:h-auto object-cover">
-              <div class="p-6 flex flex-col justify-between w-full">
-                <div>
-                  <h3 class="text-xl font-bold mb-1">Mitsubishi Xpander</h3>
-                  <p class="text-gray-600 text-sm mb-3">Lokasi: Wonokromo, Surabaya</p>
-                  <div class="flex items-center space-x-4 text-sm text-gray-500 mb-4">
-                    <span>Matic</span>
-                    <span>•</span>
-                    <span>7 Kursi</span>
-                    <span>•</span>
-                    <span>Bensin</span>
-                  </div>
-                  <p class="text-gray-700 text-sm leading-relaxed">Mobil keluarga yang nyaman dengan kabin luas. Siap
-                    menemani perjalanan liburan Anda.</p>
-                </div>
-                <div class="flex justify-between items-center mt-4 pt-4 border-t">
-                  <p class="text-lg font-bold text-indigo-600">Rp 400.000<span
                       class="text-sm font-normal text-gray-500">/hari</span></p>
                   <a href="#"
                     class="bg-indigo-600 text-white px-5 py-2 rounded-md hover:bg-indigo-700 font-semibold text-sm transition duration-300">Lihat
