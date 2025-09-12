@@ -28,6 +28,7 @@ class OwnerController extends Controller
             ->orderBy('created_at', 'DESC')->get();
         return view('owner.dashboard', compact('ownerQuotas', 'ownerDatas'));
     }
+
     public function ownerStatusIklan($id)
     {
         $adData = Vehicle::findOrFail($id);
@@ -36,6 +37,7 @@ class OwnerController extends Controller
         return redirect('/owner/dashboard')
             ->with(['status' => '' . $adData->brand . ' ' . $adData->model . ' Telah ' . ($adData->status == 'active' ? 'diaktifkan, iklan ditampilkan' : 'dinonaktifkan, iklan tidak ditampilkan')]);
     }
+
     public function ownerResubmitIklan($id)
     {
         $adData = Vehicle::findOrFail($id);
@@ -44,6 +46,15 @@ class OwnerController extends Controller
         return redirect('/owner/dashboard')
             ->with(['status' => '' . $adData->brand . ' ' . $adData->model . ' Telah diajukan kembali dan sedang menunggu persetujuan dari Admin']);
     }
+
+    public function ownerTampilPaket()
+    {
+        $planDatas = Plan::all();
+        $userPlanCheck = UserPlan::where('user_id', Auth::user()->id)->select('plan_id')->first();
+        $currentPlanId = $userPlanCheck->plan_id ?? null;
+        return view('owner.pricing', compact('planDatas', 'currentPlanId'));
+    }
+
     public function ownerAturPaket(Request $request)
     {
         $request->validate(
@@ -51,38 +62,49 @@ class OwnerController extends Controller
                 'plan_id' => 'required|string',
             ]
         );
+        $userPlanCheck = UserPlan::where('user_id', Auth::user()->id)->first();
         $startDate = Carbon::now();
-        $endDate = null;
+        $endDate = $userPlanCheck ? $userPlanCheck->end_date : null;
         $planData = Plan::where('id', $request->plan_id)->first();
         if ($planData && $planData->duration_days !== null) {
             $endDate = $startDate->copy()->addDays($planData->duration_days);
         }
-        UserPlan::create([
-            'user_id' => Auth::user()->id,
-            'plan_id' => $request->plan_id,
-            'start_date' => $startDate,
-            'end_date' => $endDate,
-            'status' => 'active',
-        ]);
+        if ($userPlanCheck && $request->plan_id != 1) {
+            $userPlanCheck->end_date = $endDate;
+            $userPlanCheck->plan_id = $request->plan_id;
+            $userPlanCheck->save();
+        } elseif ($userPlanCheck && $userPlanCheck->plan_id > 1 && $request->plan_id == 1) {
+            return redirect('/owner/pricing')->withErrors(['status' => 'Paket Tidak dapat diturunkan menjadi Gratis']);
+        } else {
+            UserPlan::create([
+                'user_id' => Auth::user()->id,
+                'plan_id' => $request->plan_id,
+                'start_date' => $startDate,
+                'end_date' => $endDate,
+                'status' => 'active',
+            ]);
+        }
         $plan = DB::table('plans')
             ->join('user_plans', 'user_plans.plan_id', '=', 'plans.id')
             ->where('user_plans.user_id', Auth::user()->id)
             ->select('plans.name')->first();
-        if($plan){
+        if ($plan) {
             session(['plan' => $plan->name]);
         }
-        return redirect('/owner/dashboard')->with(['status' => 'Persiapan Periklanan Sudah Siap']);
+        return redirect('/owner/dashboard')->with(['status' => 'Paket Periklanan ' . $plan->name . ' Sudah Siap']);
     }
+
     public function ownerTampilTambahIklan()
     {
+        // Validasi Kuota Owner
         $quotaValid = DB::table('user_plans')->join('plans', 'user_plans.plan_id', '=', 'plans.id')
             ->join('vehicles', 'user_plans.user_id', '=', 'vehicles.user_id')
             ->where('user_plans.user_id', Auth::user()->id)
             ->select('plans.name', 'plans.quota_ads', DB::raw('COUNT(vehicles.id) as jumlah_iklan'))
             ->groupBy('plans.quota_ads', 'plans.name')->first();
-        if($quotaValid->jumlah_iklan >= $quotaValid->quota_ads){
-            return redirect('/owner/dashboard')->withErrors(['status' => 'Kuota iklan '. $quotaValid->name .' Anda sudah habis. Silakan upgrade ke paket yang lebih tinggi untuk memasang lebih banyak iklan.']);
-        }else{
+        if ($quotaValid && $quotaValid->jumlah_iklan >= $quotaValid->quota_ads) {
+            return redirect('/owner/dashboard')->withErrors(['status' => 'Kuota iklan ' . $quotaValid->name . ' Anda sudah habis. Silakan upgrade ke paket yang lebih tinggi untuk memasang lebih banyak iklan.']);
+        } else {
             return view('owner.form_iklan');
         }
     }
@@ -105,7 +127,7 @@ class OwnerController extends Controller
         if (!Storage::disk('public')->exists('photo/other')) {
             Storage::disk('public')->makeDirectory('photo/other');
         }
-        
+
         $request->validate([
             'type' => 'required|string',
             'brand' => 'required|string',
@@ -212,7 +234,7 @@ class OwnerController extends Controller
             'photo.*' => 'nullable|image|mimes:jpeg,png,jpg|max:4096',
             'deleted_photos' => 'nullable|string',
         ]);
-        
+
         $kendaraan = Vehicle::where('user_id', Auth::user()->id)->where('id', $id)->first();
         if ($request->deleted_photos) {
             $ids = json_decode($request->deleted_photos, true);
@@ -224,7 +246,7 @@ class OwnerController extends Controller
                 }
             }
         }
-        
+
         $kendaraan->type = strtolower($request->type);
         $kendaraan->brand = $request->brand;
         $kendaraan->model = $request->model;
@@ -257,7 +279,7 @@ class OwnerController extends Controller
                 // Jika foto utama dihapus, set foto baru pertama sebagai foto utama
                 $checkMainPhoto = VehiclePhoto::where('vehicle_id', $kendaraan->id)->exists();
                 if (!$checkMainPhoto || $key === 0) {
-                     $kendaraan->update(['main_photo_url' => $filename]);
+                    $kendaraan->update(['main_photo_url' => $filename]);
                 }
             }
         }

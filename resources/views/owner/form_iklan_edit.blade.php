@@ -13,7 +13,7 @@
           <div>
             <label for="type" class="block text-sm font-medium text-gray-700">Jenis Kendaraan</label>
             <select id="type" name="type"
-              class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+              class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm pointer-events-none cursor-none">
               <option {{ strtolower($vehicleDatas->type) == 'mobil' ? 'selected' : '' }}>Mobil</option>
               <option {{ strtolower($vehicleDatas->type) == 'motor' ? 'selected' : '' }}>Motor</option>
             </select>

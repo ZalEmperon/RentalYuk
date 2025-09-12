@@ -29,6 +29,9 @@ class ClientController extends Controller
     public function clientTampilDetail($id)
     {
         $vehicleData = Vehicle::with('photos')->where('id', $id)->first();
+        if ($vehicleData->mod_status == "reject" || $vehicleData->mod_status == "waiting" || $vehicleData->status == "inactive") {
+            return redirect('/')->withErrors(["status" => ($vehicleData->brand ." ".$vehicleData->model ." Tidak dapat diakses untuk sementara")]);
+        }
         return view('client.detail_kendaraan', compact('vehicleData'));
     }
 
@@ -80,9 +83,10 @@ class ClientController extends Controller
         }
 
         // Eksekusi query dengan paginasi (10 hasil per halaman)
-        $vehicleDatas = $vehicleGets->select('id', 'brand', 'type', 'model', 'price_per_day', 'transmission', 'capacity')
+        $vehicleDatas = $vehicleGets->select('id', 'brand', 'type', 'model', 'city', 'price_per_day', 'transmission', 'capacity', 'fuel_type', 'description', 'is_premium')
             ->orderBy('is_premium', 'DESC')->latest()->paginate(10);
         $searchCount = count($vehicleDatas);
-        return view('client.hasil_pencarian', compact('vehicleDatas', 'type', 'city', 'searchCount'));
+        $old_input = $request->all();
+        return view('client.hasil_pencarian', compact('vehicleDatas', 'type', 'city', 'searchCount', 'old_input'));
     }
 }

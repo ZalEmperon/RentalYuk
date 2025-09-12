@@ -1,4 +1,4 @@
-<div class="fixed right-2 bottom-2">
+<div class="fixed right-2 bottom-2 z-50">
   @if (session('status'))
     <div id="toast-success" class="flex items-center w-full max-w-xs p-4 mb-4 text-gray-100 bg-slate-800 rounded-lg shadow-sm"
       role="alert">

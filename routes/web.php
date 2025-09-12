@@ -71,9 +71,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware('verified')->group(function () {
         // Khusus role owner (Pemilik)
         Route::prefix('owner')->middleware('role:owner')->group(function () {
-            Route::get('/pricing', function () {
-                return view('owner.pricing');
-            });
+            Route::get('/pricing', [OwnerController::class, 'ownerTampilPaket']);
             Route::post('/pricing', [OwnerController::class, 'ownerAturPaket']);
             Route::middleware('planless')->group(function () {
                 Route::get('/dashboard', [OwnerController::class, 'ownerTampilDashboard']);

@@ -93,7 +93,7 @@
                       @method('PUT')
                       <button type="submit"
                         class="text-yellow-600 {{ $data->status == 'active' ? 'hover:text-green-900' : 'hover:text-yellow-900' }}">
-                        {{ $data->status == 'active' ? 'Aktifkan' : 'Nonaktifkan' }}</button>
+                        {{ $data->status == 'active' ? 'Nonaktifkan' : 'Aktifkan' }}</button>
                     </form>
                   @elseif ($data->mod_status == 'reject')
                     <form action="/owner/ad-resubmit/{{ $data->id }}" method="POST" class="inline">

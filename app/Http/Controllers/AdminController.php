@@ -42,11 +42,13 @@ class AdminController extends Controller
         $vehicleData->save();
         return redirect('/admin/moderasi')->with(['status' => $vehicleData->type ." ". $vehicleData->brand ." ". $vehicleData->model ." Telah Ditolak"]);
     }
+    
     public function adminTampilPaket()
     {
         $paketDatas = Plan::all()->sortBy('price');
         return view('admin.paket', compact('paketDatas'));
     }
+
     public function adminAturPaket(Request $request)
     {
         $request->validate([
@@ -65,6 +67,7 @@ class AdminController extends Controller
         ]);
         return redirect('/admin/paket')->with(['status' => "Paket Berhasil Ditambahkan"]);
     }
+
     public function adminEditPaket(Request $request, $id)
     {
         $request->validate([

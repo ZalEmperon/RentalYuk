@@ -89,6 +89,18 @@
                 </p>
                 <p class="text-base leading-relaxed text-gray-500" id="detailYear"></p>
               </div>
+              <div class="flex justify-between">
+                <p class="text-base leading-relaxed text-gray-500">
+                  Mode
+                </p>
+                <p class="text-base leading-relaxed text-gray-500" id="detailTransmission"></p>
+              </div>
+              <div class="flex justify-between">
+                <p class="text-base leading-relaxed text-gray-500">
+                  Kapasitas
+                </p>
+                <p class="text-base leading-relaxed text-gray-500" id="detailCapacity"></p>
+              </div>
             </div>
             <div class="col-span-2 md:col-span-1">
               <div class="flex justify-between">
@@ -108,6 +120,12 @@
                   Harga/hari
                 </p>
                 <p class="text-base leading-relaxed text-gray-500" id="detailPriceperday"></p>
+              </div>
+              <div class="flex justify-between">
+                <p class="text-base leading-relaxed text-gray-500">
+                  Jenis Bahan Bakar
+                </p>
+                <p class="text-base leading-relaxed text-gray-500" id="detailFuel_type"></p>
               </div>
             </div>
             <div class="col-span-2">
@@ -187,6 +205,9 @@
         document.getElementById('detailPriceperday').innerText = `Rp. ${v.price_per_day}` ?? '';
         document.getElementById('detailAddress').innerText = v.address ?? '';
         document.getElementById('detailDescription').innerText = v.description ?? '';
+        document.getElementById('detailTransmission').innerText = v.transmission ?? '';
+        document.getElementById('detailCapacity').innerText = `${v.capacity} orang` ?? '';
+        document.getElementById('detailFuel_type').innerText = v.fuel_type ?? '';
 
         // Fill images (assuming v.photos is an array of photo objects)
         let imgContainer = document.getElementById('detailImage');
