@@ -19,6 +19,12 @@
         <form action="" method="GET" class="bg-white p-6 rounded-lg shadow-lg sticky top-28">
           <h3 class="text-xl font-semibold mb-4 border-b pb-3">Filter Pencarian</h3>
           <div class="mb-6">
+            <label for="brand_name" class="block text-sm font-medium text-gray-700">Nama Kendaraan/Brand</label>
+            <input type="text" name="brand_name" id="brand_name" placeholder="Contoh: Honda"
+              value="{{ $old_input['brand_name'] ?? '' }}"
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+          </div>
+          <div class="mb-6">
             <h4 class="font-semibold mb-3">Tipe Transmisi</h4>
             <div class="space-y-2">
               <label class="flex items-center">
