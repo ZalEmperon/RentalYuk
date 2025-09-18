@@ -71,10 +71,17 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware('verified')->group(function () {
         // Khusus role owner (Pemilik)
         Route::prefix('owner')->middleware('role:owner')->group(function () {
+            Route::get('/riwayat-transaksi', [OwnerController::class, 'ownerTampilRiwayatTransaksi'])->name('owner.transaksi.riwayat');
+            Route::get('/pembayaran/{transaction:invoice_number}', [OwnerController::class, 'ownerTampilPembayaran'])->name('owner.pembayaran.show');
+            Route::post('/pembayaran/{transaction:invoice_number}/upload', [OwnerController::class, 'ownerUploadBukti'])->name('owner.pembayaran.upload');
+            Route::post('/paket-saya/pilih', [OwnerController::class, 'ownerPilihPaket'])->name('owner.paket.pilih');
             Route::get('/pricing', [OwnerController::class, 'ownerTampilPaket']);
-            Route::post('/pricing', [OwnerController::class, 'ownerAturPaket']);
+            // Route::post('/pricing', [OwnerController::class, 'ownerAturPaket']);
+            Route::post('/paket-saya/pilih', [OwnerController::class, 'ownerPilihPaket'])->name('owner.paket.pilih');
+            Route::get('/paket-saya', [OwnerController::class, 'ownerTampilPerbandinganPaket'])->name('owner.paket.show');
             Route::middleware('planless')->group(function () {
-                Route::get('/dashboard', [OwnerController::class, 'ownerTampilDashboard']);
+                // Route::get('/dashboard', [OwnerController::class, 'ownerTampilDashboard']);
+                Route::get('/dashboard', [OwnerController::class, 'ownerTampilDashboard'])->name('owner.dashboard');
                 Route::put('/ad-switch/{id}', [OwnerController::class, 'ownerStatusIklan']);
                 Route::put('/ad-resubmit/{id}', [OwnerController::class, 'ownerResubmitIklan']);
 
@@ -99,7 +106,10 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/paket', [AdminController::class, 'adminTampilPaket']);
             Route::post('/paket', [AdminController::class, 'adminAturPaket']);
             Route::put('/paket/{id}', [AdminController::class, 'adminEditPaket']);
-
+            
+            Route::get('/transaksi', [AdminController::class, 'adminTampilTransaksi'])->name('admin.transaksi.index');
+            Route::put('/transaksi/{transaction}/update-status', [AdminController::class, 'adminVerifikasiTransaksi'])->name('admin.transaksi.verifikasi');
+            Route::put('/transaksi/{transaction}/update-status', [AdminController::class, 'adminUpdateStatusTransaksi'])->name('admin.transaksi.update');
             Route::get('/userlist', [AdminController::class, 'adminTampilPengguna']);
         });
     });

@@ -58,6 +58,12 @@
           <span class="ml-3">Kelola Pengguna</span>
         </a>
       </li>
+      <li>
+        <a href="{{ route('admin.transaksi.index') }}" class="flex items-center p-2 text-base font-normal text-gray-300 rounded-lg hover:bg-slate-700 hover:text-white">
+          <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+          <span class="ml-3">Manajemen Transaksi</span>
+        </a>
+      </li>
     </ul>
   </div>
   <div class="absolute bottom-0 left-0 p-4 space-x-4 w-full bg-slate-900 z-20">

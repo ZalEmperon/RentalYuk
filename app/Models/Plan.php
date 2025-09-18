@@ -14,9 +14,8 @@ class Plan extends Model
         'description'
     ];
 
-    // Relationships
     public function userPlans()
     {
-        return $this->belongsTo(UserPlan::class);
+        return $this->hasMany(UserPlan::class);
     }
 }

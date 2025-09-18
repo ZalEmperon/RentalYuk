@@ -59,7 +59,8 @@
                 @endif
               </ul>
               @if ($currentPlanId != $data->id)
-                <form action="/owner/pricing" method="POST" class="flex flex-col h-full">
+                <!-- <form action="/owner/pricing" method="POST" class="flex flex-col h-full"> -->
+                <form action="{{ route('owner.paket.pilih') }}" method="POST" class="flex flex-col h-full">
                   @csrf
                   <input type="hidden" name="plan_id" value="{{ $data->id }}">
                   <button type="submit"

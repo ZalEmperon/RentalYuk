@@ -20,6 +20,7 @@ class Vehicle extends Model
         'fuel_type',
         'view_count',
         'address',
+        'main_photo_url',
         'status',
         'mod_status',
         'is_premium',

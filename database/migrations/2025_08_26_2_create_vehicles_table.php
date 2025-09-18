@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('fuel_type');
             $table->integer('view_count')->default(0);
             $table->text('address');
+            $table->string('main_photo_url')->nullable();
             $table->enum('status', ['active', 'inactive'])->default('inactive');
             $table->enum('mod_status', ['approve', 'waiting', 'reject'])->default('waiting');
             $table->boolean('is_premium')->default(false);

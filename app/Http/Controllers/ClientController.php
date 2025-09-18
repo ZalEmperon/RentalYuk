@@ -9,23 +9,28 @@ class ClientController extends Controller
 {
     public function clientTampilHome()
     {
-        // Ambil 6 data kendaraan teratas yang aktif & disetujui
-        $mobilDatas = Vehicle::with(['photos' => function ($q) {
-            $q->select('vehicle_id', 'photo_url')->limit(1);
-        }])
-            ->where('type', 'mobil')->where('status', 'active')->where('mod_status', 'approve')
-            ->select('id', 'brand', 'type', 'model', 'price_per_day', 'transmission', 'capacity')
-            ->latest()->take(6)->get();
+        // Ambil 6 data mobil teratas yang aktif & disetujui
+        $mobilDatas = Vehicle::where('type', 'mobil')
+            ->where('status', 'active')
+            ->where('mod_status', 'approve')
+            // Pilih kolom yang dibutuhkan, TERMASUK 'main_photo_url'
+            ->select('id', 'brand', 'type', 'model', 'price_per_day', 'transmission', 'capacity', 'main_photo_url')
+            ->latest()
+            ->take(6)
+            ->get();
 
-        $motorDatas = Vehicle::with(['photos' => function ($q) {
-            $q->select('vehicle_id', 'photo_url')->limit(1);
-        }])
-            ->where('type', 'motor')->where('status', 'active')->where('mod_status', 'approve')
-            ->select('id', 'brand', 'type', 'model', 'price_per_day', 'transmission', 'capacity')
-            ->latest()->take(6)->get();
+        // Ambil 6 data motor teratas yang aktif & disetujui
+        $motorDatas = Vehicle::where('type', 'motor')
+            ->where('status', 'active')
+            ->where('mod_status', 'approve')
+            // Pilih kolom yang dibutuhkan, TERMASUK 'main_photo_url'
+            ->select('id', 'brand', 'type', 'model', 'price_per_day', 'transmission', 'capacity', 'main_photo_url')
+            ->latest()
+            ->take(6)
+            ->get();
+
         return view('client.home', compact('mobilDatas', 'motorDatas'));
     }
-
     public function clientTampilDetail($id)
     {
         $vehicleData = Vehicle::with('photos')->where('id', $id)->first();

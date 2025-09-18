@@ -12,7 +12,7 @@
   </button>
   <h1 class="text-xl font-semibold text-gray-800">Selamat Datang, {{ auth()->user()->name }}</h1>
   <div class="flex items-center space-x-4">
-    <a href="/owner/pricing" class="text-sm p-4">Paket: <span class="font-semibold text-indigo-600">{{ session('plan') }}</span></a>
+  <a href="{{ route('owner.paket.show') }}" class="text-sm p-4">Paket: <span class="font-semibold text-indigo-600">{{ $currentPlanName }}</span></a>
     {{-- <img class="h-10 w-10 rounded-full object-cover" src="https://placehold.co/100x100/667eea/ffffff?text=B"
       alt="User avatar"> --}}
   </div>
