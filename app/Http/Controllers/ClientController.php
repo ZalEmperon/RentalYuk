@@ -13,7 +13,7 @@ class ClientController extends Controller
         $mobilDatas = Vehicle::where('type', 'mobil')
             ->where('status', 'active')
             ->where('mod_status', 'approve')
-            // Pilih kolom yang dibutuhkan, TERMASUK 'main_photo_url'
+            // Pastikan kolom 'main_photo_url' diambil dari database
             ->select('id', 'brand', 'type', 'model', 'price_per_day', 'transmission', 'capacity', 'main_photo_url')
             ->latest()
             ->take(6)
@@ -23,7 +23,7 @@ class ClientController extends Controller
         $motorDatas = Vehicle::where('type', 'motor')
             ->where('status', 'active')
             ->where('mod_status', 'approve')
-            // Pilih kolom yang dibutuhkan, TERMASUK 'main_photo_url'
+            // Pastikan kolom 'main_photo_url' diambil dari database
             ->select('id', 'brand', 'type', 'model', 'price_per_day', 'transmission', 'capacity', 'main_photo_url')
             ->latest()
             ->take(6)
