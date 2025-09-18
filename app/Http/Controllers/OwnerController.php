@@ -280,11 +280,7 @@ class OwnerController extends Controller
             $filename = $kendaraan->type . time() . '_' . Str::random(5) . '.' . $image->extension();
             $path = 'photo/' . $kendaraan->type;
             $image->storeAs($path, $filename, 'public');
-            
-            VehiclePhoto::create([
-                'vehicle_id' => $kendaraan->id,
-                'photo_url' => $filename,
-            ]);
+            VehiclePhoto::create(['vehicle_id' => $kendaraan->id, 'photo_url' => $filename]);
         }
     }
 
@@ -292,17 +288,26 @@ class OwnerController extends Controller
     $mainPhotoFilename = $request->input('main_photo_url');
     $firstAvailablePhoto = $kendaraan->photos()->orderBy('id', 'asc')->first();
 
-    // Jika user memilih foto, gunakan pilihan tersebut.
-    // Jika tidak (misalnya hanya unggah 1 foto dan tidak diklik), gunakan foto pertama.
-    if ($mainPhotoFilename && $kendaraan->photos()->where('photo_url', 'LIKE', '%' . basename($mainPhotoFilename))->exists()) {
-        $kendaraan->main_photo_url = basename($mainPhotoFilename);
+    if ($mainPhotoFilename) {
+        // Cari nama file yang cocok dari yang baru diunggah
+        $chosenPhoto = collect($request->file('photos'))->first(function ($file) use ($mainPhotoFilename) {
+            return $file->getClientOriginalName() == $mainPhotoFilename;
+        });
+
+        if ($chosenPhoto) {
+            // Temukan record foto yang sesuai di database untuk mendapatkan nama file acaknya
+            $photoRecord = $kendaraan->photos()->where('photo_url', 'like', '%' . pathinfo($chosenPhoto->getClientOriginalName(), PATHINFO_FILENAME) . '%')->latest()->first();
+            if($photoRecord) {
+                 $kendaraan->main_photo_url = $photoRecord->photo_url;
+            }
+        }
     } elseif ($firstAvailablePhoto) {
         $kendaraan->main_photo_url = $firstAvailablePhoto->photo_url;
     }
     
     $kendaraan->save();
     
-    return redirect()->route('owner.dashboard')->with(['status' => 'Iklan berhasil ditambahkan dan menunggu verifikasi.']);
+    return redirect()->route('owner.dashboard')->with(['status' => 'Iklan berhasil ditambahkan.']);
 }
 
     public function ownerTampilEditIklan(Request $request, $id)

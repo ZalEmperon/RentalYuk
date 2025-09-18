@@ -95,41 +95,25 @@
 
       <!-- Section 4: Unggah Foto -->
       <div class="bg-white p-6 rounded-lg shadow-lg">
-            <h2 class="text-xl font-semibold border-b pb-4 mb-6">4.1 Foto Utama (Wajib Diisi)</h2>
-            <p class="text-sm text-gray-500 mb-4">Pilih satu foto terbaik yang akan menjadi sampul iklan Anda.</p>
-            <div class="flex items-center gap-6">
-                <div class="w-40 h-32 bg-gray-100 rounded-lg flex items-center justify-center border">
-                    <img id="main-photo-preview" src="https://placehold.co/160x128/e2e8f0/adb5bd?text=Foto+Utama" alt="Preview Foto Utama" class="h-full w-full object-cover rounded-lg">
-                </div>
-                <div>
-                    <label for="main-photo-upload" class="cursor-pointer bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-50 text-sm font-medium">
-                        Pilih Gambar
-                    </label>
-                    <input id="main-photo-upload" name="main_photo" type="file" class="hidden" accept="image/jpeg,image/png,image/jpg">
-                    <p class="text-xs text-gray-500 mt-2">PNG, JPG hingga 4 MB.</p>
-                </div>
+    <h2 class="text-xl font-semibold border-b pb-4 mb-6">4. Foto Kendaraan</h2>
+    <p class="text-sm text-gray-500 mb-4">Unggah semua foto kendaraan Anda di sini. Klik pada salah satu foto untuk menjadikannya sebagai **Foto Utama** (sampul iklan).</p>
+    
+    <input type="hidden" name="main_photo_url" id="main_photo_input">
+    
+    <div id="dropzone" class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md transition-colors">
+        <div class="space-y-1 text-center">
+            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true"><path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            <div class="flex text-sm text-gray-600">
+                <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500">
+                    <span>Unggah file</span>
+                    <input id="file-upload" name="photos[]" type="file" class="sr-only" multiple accept="image/jpeg,image/png,image/jpg" required>
+                </label>
+                <p class="pl-1">atau seret dan lepas</p>
             </div>
+            <p class="text-xs text-gray-500">PNG, JPG hingga 4 MB per foto.</p>
         </div>
-
-        <div class="bg-white p-6 rounded-lg shadow-lg">
-            <h2 class="text-xl font-semibold border-b pb-4 mb-6">4.2 Foto Detail (Opsional)</h2>
-            <p class="text-sm text-gray-500 mb-4">Unggah beberapa foto tambahan untuk menunjukkan detail kendaraan dari berbagai sudut.</p>
-            <div id="dropzone" class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md transition-colors">
-                <div class="space-y-1 text-center">
-                    <svg class="mx-auto h-12 w-12 text-gray-400" ...></svg>
-                    <div class="flex text-sm text-gray-600">
-                        <label for="file-upload" class="relative cursor-pointer ...">
-                            <span>Unggah file</span>
-                            <input id="file-upload" name="detail_photos[]" type="file" class="sr-only" multiple accept="image/jpeg,image/png,image/jpg">
-                        </label>
-                        <p class="pl-1">atau seret dan lepas</p>
-                    </div>
-                    <p class="text-xs text-gray-500">PNG, JPG hingga 4 MB per foto. Hingga 5 foto.</p>
-                    <div id="preview" class="flex flex-wrap gap-2 justify-center mt-3"></div>
-                </div>
-            </div>
-        </div>
-
+    </div>
+    <div id="preview" class="flex flex-wrap gap-4 justify-start mt-4"></div>
       <!-- Tombol Aksi -->
       <div class="flex justify-end space-x-4">
         <button type="submit"
@@ -141,65 +125,92 @@
 @endsection
 
 @section('custom-js')
-  <script>
-    const dropzone = document.getElementById("dropzone");
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const previewContainer = document.getElementById('preview');
+    const mainPhotoInput = document.getElementById('main_photo_input');
     const fileInput = document.getElementById("file-upload");
-    const preview = document.getElementById("preview");
-    const mainPhotoInput = document.getElementById("main-photo-upload");
-    const mainPhotoPreview = document.getElementById("main-photo-preview");
+    const dropzone = document.getElementById("dropzone");
+    let uploadedFiles = []; // Array untuk menyimpan objek File
 
-    mainPhotoInput.addEventListener("change", e => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                mainPhotoPreview.src = event.target.result;
-            }
-            reader.readAsDataURL(file);
+    // Fungsi untuk menandai foto utama
+    function setMainPhoto(itemElement) {
+        document.querySelectorAll('.photo-preview-item').forEach(el => el.classList.remove('is-main'));
+        if (itemElement) {
+            itemElement.classList.add('is-main');
+            mainPhotoInput.value = itemElement.dataset.filename;
+        } else {
+            mainPhotoInput.value = '';
         }
-    });
-    ["dragenter", "dragover"].forEach(event => {
-      dropzone.addEventListener(event, e => {
-        e.preventDefault();
-        e.stopPropagation();
-        dropzone.classList.add("border-indigo-500", "bg-indigo-50");
-      });
-    });
-
-    ["dragleave", "drop"].forEach(event => {
-      dropzone.addEventListener(event, e => {
-        e.preventDefault();
-        e.stopPropagation();
-        dropzone.classList.remove("border-indigo-500", "bg-indigo-50");
-      });
-    });
-
-    dropzone.addEventListener("drop", e => {
-      e.preventDefault();
-      e.stopPropagation();
-      const dt = new DataTransfer();
-      [...fileInput.files, ...e.dataTransfer.files].forEach(file => dt.items.add(file));
-      fileInput.files = dt.files;
-      handleFiles(e.dataTransfer.files);
-    });
-
-    fileInput.addEventListener("change", e => {
-      handleFiles(fileInput.files);
-    });
-
-    function handleFiles(files) {
-      preview.innerHTML = ''; // Membersihkan preview sebelum menampilkan yang baru
-      [...files].forEach(file => {
-        if (!file.type.startsWith("image/")) return;
-        const reader = new FileReader();
-        reader.onload = e => {
-          const img = document.createElement("img");
-          img.src = e.target.result;
-          img.classList.add("h-20", "w-20", "object-cover", "rounded", "shadow");
-          preview.appendChild(img);
-        };
-        reader.readAsDataURL(file);
-      });
     }
-  </script>
+
+    // Fungsi untuk menangani event listener pada item foto
+    function addPhotoEventListeners(element) {
+        element.addEventListener('click', () => setMainPhoto(element));
+    }
+
+    // Fungsi untuk menangani file yang dipilih atau di-drop
+    function handleFiles(files) {
+        // Gabungkan file lama (jika ada) dengan file baru dan filter duplikat
+        const newFiles = [...files].filter(file => !uploadedFiles.some(existing => existing.name === file.name));
+        uploadedFiles.push(...newFiles);
+
+        // Buat ulang preview dari awal berdasarkan array `uploadedFiles`
+        previewContainer.innerHTML = '';
+        const dt = new DataTransfer();
+
+        uploadedFiles.forEach((file, index) => {
+            dt.items.add(file);
+            
+            const reader = new FileReader();
+            reader.onload = e => {
+                const filename = file.name;
+                const wrapper = document.createElement("div");
+                wrapper.classList.add("relative", "group", "photo-preview-item", "cursor-pointer");
+                wrapper.dataset.filename = filename;
+                
+                wrapper.innerHTML = `
+                    <img src="${e.target.result}" class="h-24 w-24 object-cover rounded-md shadow-md">
+                    <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span class="text-white text-xs font-bold">Jadikan Utama</span>
+                    </div>
+                    <span class="main-photo-badge absolute top-1 right-1 bg-indigo-600 text-white text-xs font-semibold px-2 py-0.5 rounded-full hidden">Utama</span>
+                `;
+                
+                previewContainer.appendChild(wrapper);
+                addPhotoEventListeners(wrapper);
+
+                // Otomatis tandai foto utama
+                const currentMain = mainPhotoInput.value;
+                if (currentMain === filename) {
+                    setMainPhoto(wrapper);
+                } else if (!currentMain && index === 0) {
+                    setMainPhoto(wrapper);
+                }
+            };
+            reader.readAsDataURL(file);
+        });
+        
+        fileInput.files = dt.files; // Update file input dengan file yang valid
+    }
+
+    // Event listeners untuk dropzone
+    dropzone.addEventListener("drop", e => {
+        e.preventDefault(); e.stopPropagation();
+        dropzone.classList.remove("border-indigo-500", "bg-indigo-50");
+        handleFiles(e.dataTransfer.files);
+    });
+
+    fileInput.addEventListener("change", e => handleFiles(e.target.files));
+
+    ["dragenter", "dragover"].forEach(event => dropzone.addEventListener(event, e => {
+        e.preventDefault(); e.stopPropagation();
+        dropzone.classList.add("border-indigo-500", "bg-indigo-50");
+    }));
+    ["dragleave"].forEach(event => dropzone.addEventListener(event, e => {
+        e.preventDefault(); e.stopPropagation();
+        dropzone.classList.remove("border-indigo-500", "bg-indigo-50");
+    }));
+});
+</script>
 @endsection
