@@ -17,6 +17,7 @@
   @yield('page-content')
   {{-- Footer --}}
   @include('client.components.footer')
+  @include('admin.components.status_popup')
   @yield('custom-js')
   <script>
     // Mobile menu toggle

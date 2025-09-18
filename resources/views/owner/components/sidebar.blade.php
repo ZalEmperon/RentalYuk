@@ -32,6 +32,19 @@
         </a>
       </li>
       <li>
+        <a href="{{ route('owner.paket.show') }}" class="flex items-center p-2 text-base font-normal text-gray-300 rounded-lg hover:bg-slate-700 hover:text-white">
+          <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+          <span class="ml-3">Paket Saya</span>
+        </a>
+      </li>
+
+      <li>
+        <a href="{{ route('owner.transaksi.riwayat') }}" class="flex items-center p-2 text-base font-normal text-gray-300 rounded-lg hover:bg-slate-700 hover:text-white">
+          <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+          <span class="ml-3">Riwayat Transaksi</span>
+        </a>
+      </li>
+      <li>
         <a href="/owner/pengaturan"
           class="flex items-center p-2 text-base font-normal text-gray-300 rounded-lg hover:bg-slate-700 hover:text-white">
           <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

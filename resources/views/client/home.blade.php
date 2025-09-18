@@ -152,8 +152,7 @@
             <div
               class="bg-white rounded-xl shadow-lg overflow-hidden group animate-on-scroll delay-{{ $loop->iteration * 100 }}">
               <div class="overflow-hidden">
-                <img
-                  src="{{ $data->photos->isNotEmpty() ? asset('storage/photo/' . $data->type . '/' . $data->photos->first()->photo_url) : 'https://placehold.co/600x400/3498db/ffffff?text=No+Image' }}"
+              <img src="{{ $data->main_photo_url ? asset('storage/photo/' . $data->type . '/' . $data->main_photo_url) : 'https://placehold.co/600x400/1abc9c/ffffff?text=No+Image' }}"
                   alt="{{ $data->brand }} {{ $data->model }}"
                   class="w-full h-56 object-cover transform group-hover:scale-110 transition-transform duration-700 ease-in-out">
               </div>
@@ -199,8 +198,7 @@
             <div
               class="bg-white rounded-xl shadow-lg overflow-hidden group animate-on-scroll delay-{{ $loop->iteration * 100 }}">
               <div class="overflow-hidden">
-                <img
-                  src="{{ $data->photos->isNotEmpty() ? asset('storage/photo/' . $data->type . '/' . $data->photos->first()->photo_url) : 'https://placehold.co/600x400/1abc9c/ffffff?text=No+Image' }}"
+              <img src="{{ $data->main_photo_url ? asset('storage/photo/' . $data->type . '/' . $data->main_photo_url) : 'https://placehold.co/600x400/3498db/ffffff?text=No+Image' }}"
                   alt="{{ $data->brand }} {{ $data->model }}"
                   class="w-full h-56 object-cover transform group-hover:scale-110 transition-transform duration-700 ease-in-out">
               </div>

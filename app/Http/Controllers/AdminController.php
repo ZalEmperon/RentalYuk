@@ -6,10 +6,11 @@ use App\Models\Plan;
 use App\Models\User;
 use App\Models\UserPlan;
 use App\Models\Vehicle;
+use App\Models\Transaction;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use Carbon\Carbon;
 class AdminController extends Controller
 {
     public function adminTampilDashboard()
@@ -42,11 +43,13 @@ class AdminController extends Controller
         $vehicleData->save();
         return redirect('/admin/moderasi')->with(['status' => $vehicleData->type ." ". $vehicleData->brand ." ". $vehicleData->model ." Telah Ditolak"]);
     }
+    
     public function adminTampilPaket()
     {
         $paketDatas = Plan::all()->sortBy('price');
         return view('admin.paket', compact('paketDatas'));
     }
+
     public function adminAturPaket(Request $request)
     {
         $request->validate([
@@ -65,6 +68,7 @@ class AdminController extends Controller
         ]);
         return redirect('/admin/paket')->with(['status' => "Paket Berhasil Ditambahkan"]);
     }
+
     public function adminEditPaket(Request $request, $id)
     {
         $request->validate([
@@ -93,5 +97,62 @@ class AdminController extends Controller
         }])->orderBy('role', 'DESC')->get();
         // dd($userDatas);
         return view('admin.pengguna', compact('userDatas'));
+    }
+
+    public function adminTampilTransaksi()
+    {
+        $transactions = Transaction::with(['user', 'plan'])
+            ->orderByRaw("FIELD(status, 'pending', 'success', 'failed')")
+            ->latest()->get();
+        return view('admin.transaksi', compact('transactions'));
+    }
+
+    public function adminVerifikasiTransaksi(Request $request, Transaction $transaction)
+    {
+        $request->validate(['status' => 'required|in:success,failed']);
+        $transaction->status = $request->status;
+        $transaction->save();
+
+        // Jika pembayaran sukses, aktifkan paket user
+        if ($request->status == 'success') {
+            $plan = $transaction->plan;
+            $user = $transaction->user;
+            $startDate = Carbon::now();
+            $endDate = $plan->duration_days ? $startDate->copy()->addDays($plan->duration_days) : null;
+
+            UserPlan::updateOrCreate(['user_id' => $user->id], [
+                'plan_id' => $plan->id, 'start_date' => $startDate,
+                'end_date' => $endDate, 'status' => 'active',
+            ]);
+        }
+
+        return back()->with('status', 'Status transaksi ' . $transaction->invoice_number . ' berhasil diperbarui.');
+    }
+
+    public function adminUpdateStatusTransaksi(Request $request, Transaction $transaction)
+    {
+        $request->validate(['status' => 'required|in:success,failed']);
+
+        $transaction->status = $request->status;
+        $transaction->save();
+
+        // Jika pembayaran sukses, aktifkan atau perbarui paket user
+        if ($request->status == 'success') {
+            $plan = $transaction->plan;
+            $user = $transaction->user;
+            $endDate = $plan->duration_days ? now()->addDays($plan->duration_days) : null;
+
+            UserPlan::updateOrCreate(
+                ['user_id' => $user->id], // Cari berdasarkan user_id
+                [
+                    'plan_id' => $plan->id, 
+                    'start_date' => now(), 
+                    'end_date' => $endDate, 
+                    'status' => 'active'
+                ]
+            );
+        }
+
+        return back()->with('status', 'Status transaksi untuk invoice ' . $transaction->invoice_number . ' berhasil diperbarui.');
     }
 }

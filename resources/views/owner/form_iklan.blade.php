@@ -95,30 +95,40 @@
 
       <!-- Section 4: Unggah Foto -->
       <div class="bg-white p-6 rounded-lg shadow-lg">
-        <h2 class="text-xl font-semibold border-b pb-4 mb-6">4. Foto Kendaraan</h2>
-        <div id="dropzone"
-          class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md transition-colors">
-          <div class="space-y-1 text-center">
-            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48"
-              aria-hidden="true">
-              <path
-                d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8"
-                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-            <div class="flex text-sm text-gray-600">
-              <label for="file-upload"
-                class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                <span>Unggah file</span>
-                <input id="file-upload" name="photo[]" type="file" class="sr-only" multiple>
-              </label>
-              <p class="pl-1">atau seret dan lepas</p>
+            <h2 class="text-xl font-semibold border-b pb-4 mb-6">4.1 Foto Utama (Wajib Diisi)</h2>
+            <p class="text-sm text-gray-500 mb-4">Pilih satu foto terbaik yang akan menjadi sampul iklan Anda.</p>
+            <div class="flex items-center gap-6">
+                <div class="w-40 h-32 bg-gray-100 rounded-lg flex items-center justify-center border">
+                    <img id="main-photo-preview" src="https://placehold.co/160x128/e2e8f0/adb5bd?text=Foto+Utama" alt="Preview Foto Utama" class="h-full w-full object-cover rounded-lg">
+                </div>
+                <div>
+                    <label for="main-photo-upload" class="cursor-pointer bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-50 text-sm font-medium">
+                        Pilih Gambar
+                    </label>
+                    <input id="main-photo-upload" name="main_photo" type="file" class="hidden" accept="image/jpeg,image/png,image/jpg">
+                    <p class="text-xs text-gray-500 mt-2">PNG, JPG hingga 4 MB.</p>
+                </div>
             </div>
-            <p class="text-xs text-gray-500">PNG, JPG hingga 4 MB per foto. Hingga 5 foto.</p>
-            <!-- preview -->
-            <div id="preview" class="flex flex-wrap gap-2 justify-center mt-3"></div>
-          </div>
         </div>
-      </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+            <h2 class="text-xl font-semibold border-b pb-4 mb-6">4.2 Foto Detail (Opsional)</h2>
+            <p class="text-sm text-gray-500 mb-4">Unggah beberapa foto tambahan untuk menunjukkan detail kendaraan dari berbagai sudut.</p>
+            <div id="dropzone" class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md transition-colors">
+                <div class="space-y-1 text-center">
+                    <svg class="mx-auto h-12 w-12 text-gray-400" ...></svg>
+                    <div class="flex text-sm text-gray-600">
+                        <label for="file-upload" class="relative cursor-pointer ...">
+                            <span>Unggah file</span>
+                            <input id="file-upload" name="detail_photos[]" type="file" class="sr-only" multiple accept="image/jpeg,image/png,image/jpg">
+                        </label>
+                        <p class="pl-1">atau seret dan lepas</p>
+                    </div>
+                    <p class="text-xs text-gray-500">PNG, JPG hingga 4 MB per foto. Hingga 5 foto.</p>
+                    <div id="preview" class="flex flex-wrap gap-2 justify-center mt-3"></div>
+                </div>
+            </div>
+        </div>
 
       <!-- Tombol Aksi -->
       <div class="flex justify-end space-x-4">
@@ -135,7 +145,19 @@
     const dropzone = document.getElementById("dropzone");
     const fileInput = document.getElementById("file-upload");
     const preview = document.getElementById("preview");
+    const mainPhotoInput = document.getElementById("main-photo-upload");
+    const mainPhotoPreview = document.getElementById("main-photo-preview");
 
+    mainPhotoInput.addEventListener("change", e => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                mainPhotoPreview.src = event.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+    });
     ["dragenter", "dragover"].forEach(event => {
       dropzone.addEventListener(event, e => {
         e.preventDefault();

@@ -6,22 +6,19 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::table('vehicles', function (Blueprint $table) {
-            $table->string('transmission')->nullable()->after('year');
-            $table->integer('capacity')->nullable()->after('transmission');
-            $table->string('fuel_type')->nullable()->after('capacity');
+            // Tambahkan kolom baru setelah kolom 'address'
+            $table->string('main_photo_url')->nullable()->after('address');
         });
     }
 
     public function down(): void
     {
         Schema::table('vehicles', function (Blueprint $table) {
-            $table->dropColumn(['transmission', 'capacity', 'fuel_type']);
+            // Hapus kolom jika migrasi di-rollback
+            $table->dropColumn('main_photo_url');
         });
     }
 };
