@@ -11,7 +11,6 @@ use App\Http\Controllers\ClientController;
 Route::get('/', [ClientController::class, 'clientTampilHome']);
 Route::get('/detail/{id}', [ClientController::class, 'clientTampilDetail']);
 Route::get('/sewa-{type}-{city}', [ClientController::class, 'clientTampilPencarian']);
-// Route::get('/sewa-{type}-{city}', function () {return view('client.hasil_pencarian');});
 
 // Halaman/Fungsi yang bisa diakses jika belum masuk / login
 Route::middleware('guest')->group(function () {
@@ -91,6 +90,8 @@ Route::middleware(['auth'])->group(function () {
                 Route::put('/form-iklan/edit/{id}', [OwnerController::class, 'ownerEditIklan']);
                 Route::delete('/form-iklan/delete/{id}', [OwnerController::class, 'ownerHapusIklan']);
 
+                Route::get('/transaksi', [OwnerController::class, 'ownerTampilTransaksi']);
+
                 Route::get('/pengaturan', [OwnerController::class, 'ownerTampilProfil']);
                 Route::put('/pengaturan', [OwnerController::class, 'ownerAturProfil']);
                 Route::put('/pengaturan/pass', [OwnerController::class, 'ownerAturPass']);
@@ -102,7 +103,10 @@ Route::middleware(['auth'])->group(function () {
 
             Route::get('/moderasi', [AdminController::class, 'adminTampilModerasi']);
             Route::put('/moderasi/{decision}-{id}', [AdminController::class, 'adminAturModerasi']);
-
+            
+            Route::get('/transaksi/{$id}', [AdminController::class, 'ownerTampilTransaksi']);
+            Route::post('/transaksi/{$id}', [AdminController::class, 'ownerTampilTransaksi']);
+            
             Route::get('/paket', [AdminController::class, 'adminTampilPaket']);
             Route::post('/paket', [AdminController::class, 'adminAturPaket']);
             Route::put('/paket/{id}', [AdminController::class, 'adminEditPaket']);

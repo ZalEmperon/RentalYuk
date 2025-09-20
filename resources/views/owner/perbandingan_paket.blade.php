@@ -29,9 +29,9 @@
 
           <div class="my-6 text-center">
             @if(is_null($plan->price))
-              <span class="text-5xl font-extrabold text-gray-900">Gratis</span>
+              <span class="text-3xl font-extrabold text-gray-900">Rp 0</span>
             @else
-              <span class="text-5xl font-extrabold text-gray-900">Rp {{ number_format($plan->price, 0, ',', '.') }}</span>
+              <span class="text-3xl font-extrabold text-gray-900">Rp {{ number_format($plan->price, 0, ',', '.') }}</span>
               <span class="text-gray-500">/ bulan</span>
             @endif
           </div>

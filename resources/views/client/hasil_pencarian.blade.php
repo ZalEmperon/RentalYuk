@@ -120,16 +120,16 @@
                       @endif
                     </div>
                     <p class="text-gray-600 text-sm mb-3">Kota: {{ $data->city }}</p>
-                    <div class="flex items-center space-x-4 text-sm text-gray-500 mb-4">
+                    <div class="flex items-center space-x-4 text-sm text-gray-500 mb-2">
                       <span>{{ $data->transmission }}</span>
                       <span>•</span>
                       <span>{{ $data->capacity }} Kursi</span>
                       <span>•</span>
                       <span>{{ $data->fuel_type }}</span>
                     </div>
-                    <p class="text-gray-700 text-sm leading-relaxed">{{ $data->description }}</p>
+                    {{-- <p class="text-gray-700 text-sm leading-relaxed">{{ $data->description }}</p> --}}
                   </div>
-                  <div class="flex justify-between items-center mt-4 pt-4 border-t">
+                  <div class="flex justify-between items-center mt-2 pt-2 border-t">
                     <p class="text-lg font-bold text-indigo-600">Rp
                       {{ number_format($data->price_per_day, 0, ',', '.') }}<span
                         class="text-sm font-normal text-gray-500">/hari</span></p>

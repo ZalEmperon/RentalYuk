@@ -33,11 +33,28 @@ class ClientController extends Controller
     }
     public function clientTampilDetail($id)
     {
-        $vehicleData = Vehicle::with('photos')->where('id', $id)->first();
-        if ($vehicleData->mod_status == "reject" || $vehicleData->mod_status == "waiting" || $vehicleData->status == "inactive") {
+        $vehicleData = Vehicle::where('id', $id)->first();
+        if ($vehicleData->mod_status == "locked" || $vehicleData->status == "locked" || $vehicleData->mod_status == "reject" || $vehicleData->mod_status == "waiting" || $vehicleData->status == "inactive") {
             return redirect('/')->withErrors(["status" => ($vehicleData->brand ." ".$vehicleData->model ." Tidak dapat diakses untuk sementara")]);
         }
-        return view('client.detail_kendaraan', compact('vehicleData'));
+        $vehicleJsonLd = json_encode([
+            '@context' => 'https://schema.org',
+            '@type' => 'Vehicle',
+            'name' => $vehicleData->brand . ' ' . $vehicleData->model,
+            'description' => $vehicleData->description,
+            'image' => $vehicleData->photos->map(fn($p) => asset('storage/photo/'.$vehicleData->type.'/'.$p->photo_url))->toArray(),
+            'offers' => [
+                '@type' => 'Offer',
+                'price' => $vehicleData->price_per_day,
+                'priceCurrency' => 'IDR',
+                'availability' => 'https://schema.org/InStock'
+            ],
+            'brand' => [
+                '@type' => 'Brand',
+                'name' => $vehicleData->brand
+            ]
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        return view('client.detail_kendaraan', compact('vehicleData', 'vehicleJsonLd'));
     }
 
     public function clientTampilPencarian(Request $request, $type, $city)

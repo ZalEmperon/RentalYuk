@@ -12,9 +12,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->enum('type', ['mobil', 'motor']);
-            $table->string('brand'); // Merek: Toyota, Honda
-            $table->string('model'); // Model: Avanza, Beat
-            $table->integer('year'); // Tahun: 2022
+            $table->string('brand'); 
+            $table->string('model'); 
+            $table->integer('year'); 
             $table->text('description');
             $table->decimal('price_per_day', 12, 2);
             $table->string('city');
@@ -24,8 +24,8 @@ return new class extends Migration
             $table->integer('view_count')->default(0);
             $table->text('address');
             $table->string('main_photo_url')->nullable();
-            $table->enum('status', ['active', 'inactive'])->default('inactive');
-            $table->enum('mod_status', ['approve', 'waiting', 'reject'])->default('waiting');
+            $table->enum('status', ['active', 'inactive', 'locked'])->default('inactive');
+            $table->enum('mod_status', ['approve', 'waiting', 'reject', 'locked'])->default('waiting');
             $table->boolean('is_premium')->default(false);
             $table->timestamps();
         });
