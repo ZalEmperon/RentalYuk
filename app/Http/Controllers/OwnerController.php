@@ -389,6 +389,11 @@ class OwnerController extends Controller
         }
         if ($kendaraan) {
             $kendaraan->delete();
+            $lockedVehicle = Vehicle::where('mod_status', 'locked')->where('status', 'locked')
+                ->where('user_id', Auth::user()->id)->orderBy('id', 'DESC')->first();
+            if($lockedVehicle){
+                $lockedVehicle->update(['mod_status' => 'approve','status' => 'active']);
+            }
         }
         return redirect('/owner/dashboard')->with(['status' => 'Iklan Berhasil Dihapus']);
     }

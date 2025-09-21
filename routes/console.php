@@ -15,6 +15,7 @@ Schedule::call(function () {
         ->join('user_plans', 'users.id', '=', 'user_plans.user_id')
         ->join('plans', 'user_plans.plan_id', '=', 'plans.id')
         ->join('vehicles', 'users.id', '=', 'vehicles.user_id')
+        ->where('vehicles.mod_status','!=','waiting')
         ->select('users.id', 'plans.quota_ads', 'plans.name as nama_paket', DB::raw('COUNT(vehicles.id) as total_vehicles'))
         ->groupBy('users.id', 'plans.quota_ads', 'plans.name')
         ->havingRaw('COUNT(vehicles.id) > plans.quota_ads')
@@ -38,4 +39,4 @@ Schedule::call(function () {
         }
         Log::info(count($excessVehicleIds) .' iklan anda telah dikunci karena kuota Paket ' . $user->nama_paket . ' telah Habis.');
     }
-})->everySixHours();
+})->everyTenSeconds();
