@@ -98,7 +98,7 @@ Route::middleware(['auth'])->group(function () {
         // Khusus role Admin
         Route::prefix('admin')->middleware('role:admin')->group(function () {
             Route::get('/dashboard', [AdminController::class, 'adminTampilDashboard']);
-
+            Route::get('/admin/chart-data', [AdminController::class, 'getChartData'])->middleware('auth:sanctum');
             Route::get('/moderasi', [AdminController::class, 'adminTampilModerasi']);
             Route::put('/moderasi/{decision}-{id}', [AdminController::class, 'adminAturModerasi']);
 
@@ -106,7 +106,8 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/transaksi/{$id}', [AdminController::class, 'ownerTampilTransaksi']);
 
             Route::get('/paket', [AdminController::class, 'adminTampilPaket']);
-            Route::post('/paket', [AdminController::class, 'adminAturPaket']);
+            // Route::post('/paket', [AdminController::class, 'adminAturPaket']);
+            Route::post('/paket', [AdminController::class, 'adminAturPaket'])->name('admin.paket.store');
             Route::put('/paket/{id}', [AdminController::class, 'adminEditPaket']);
 
             Route::get('/transaksi', [AdminController::class, 'adminTampilTransaksi'])->name('admin.transaksi.index');

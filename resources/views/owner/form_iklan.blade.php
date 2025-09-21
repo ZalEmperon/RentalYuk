@@ -178,7 +178,7 @@
             wrapper.dataset.filename = filename;
 
             wrapper.innerHTML = `
-                    <img src="${e.target.result}" class="h-24 w-24 object-cover rounded-md shadow-md">
+                    <img src="${e.target.result}" class="h-48 w-48 object-cover rounded-md shadow-md">
                     <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                         <span class="text-white text-xs font-bold">Jadikan Utama</span>
                     </div>

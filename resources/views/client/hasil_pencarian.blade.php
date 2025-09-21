@@ -1,5 +1,7 @@
 @extends('client.components.base')
 
+@section('title', 'jduul halamannya')
+
 @section('seo_element')
   <meta name="description"
     content="Temukan {{ $type }} bekas & baru di {{ $city == 'semua' ? 'berbagai kota' : $city }} dengan harga terbaik. Lihat daftar {{ $type }} matic, sport, dan lainnya yang terbaru. Dapatkan {{ $type }} impianmu sekarang!">
@@ -24,106 +26,132 @@
           <form action="" id="searchForm" method="GET"
             class="bg-white/60 backdrop-blur-xl p-6 rounded-2xl shadow-lg border border-white/20 sticky top-28">
             <h3 class="text-xl font-semibold mb-4 border-b pb-3 text-gray-800">Filter Pencarian</h3>
+
+            {{-- Nama Kendaraan/Brand --}}
             <div class="mb-6">
-              <h4 for="keyword" class="font-semibold mb-3">Nama Kendaraan/Brand</h4>
-              <input type="text" name="keyword" id="keyword" placeholder="Contoh: Honda atau Karisma"
-                value="{{ $old_input['keyword'] ?? '' }}"
-                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+              <label for="keyword" class="flex items-center font-semibold mb-3 text-gray-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                Nama Kendaraan/Brand
+              </label>
+              <input type="text" name="keyword" id="keyword" placeholder="Contoh: Honda" value="{{ $old_input['keyword'] ?? '' }}"
+                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
             </div>
+
+            {{-- Lokasi Kota/Daerah --}}
             <div class="mb-6">
-              <h4 for="city" class="font-semibold mb-3">Lokasi Kota/Daerah</h4>
-              <input type="text" id="city" placeholder="Contoh: Surabaya"
-                value="{{ $city ?? '' }}"
-                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+              <label for="city" class="flex items-center font-semibold mb-3 text-gray-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                Lokasi Kota/Daerah
+              </label>
+              <input type="text" name="city" id="city" placeholder="Contoh: Surabaya" value="{{ ($city ?? 'semua') == 'semua' ? '' : $city }}"
+                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
             </div>
+
+            {{-- Jenis Kendaraan --}}
             <div class="mb-6">
-              <h4 class="font-semibold mb-3">Jenis Kendaraan</h4>
-              <select id="type"
-                class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                <option value="kendaraan" {{ $type == 'kendaraan' ? 'selected' : '' }}>Semua Jenis</option>
-                <option value="mobil" {{ $type == 'mobil' ? 'selected' : '' }}>Mobil</option>
-                <option value="motor" {{ $type == 'motor' ? 'selected' : '' }}>Motor</option>
+              <label for="type" class="flex items-center font-semibold mb-3 text-gray-700">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                  </svg>
+                  Jenis Kendaraan
+              </label>
+              <select id="type" name="type" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                  <option value="kendaraan" {{ $type == 'kendaraan' ? 'selected' : '' }}>Semua Jenis</option>
+                  <option value="mobil" {{ $type == 'mobil' ? 'selected' : '' }}>Mobil</option>
+                  <option value="motor" {{ $type == 'motor' ? 'selected' : '' }}>Motor</option>
               </select>
             </div>
+
+            {{-- Tipe Transmisi --}}
             <div class="mb-6">
-              <h4 class="font-semibold mb-3">Tipe Transmisi</h4>
-              <div class="space-y-2">
-                <label class="flex items-center cursor-pointer">
-                  <input type="checkbox" name="transmission[]" value="Manual"
-                    class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
-                    {{ in_array('Manual', $old_input['transmission'] ?? []) ? 'checked' : '' }}>
-                  <span class="ml-2 text-gray-700">Manual</span>
-                </label>
-                <label class="flex items-center cursor-pointer">
-                  <input type="checkbox" name="transmission[]" value="Otomatis"
-                    class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
-                    {{ in_array('Otomatis', $old_input['transmission'] ?? []) ? 'checked' : '' }}>
-                  <span class="ml-2 text-gray-700">Otomatis</span>
-                </label>
+              <h4 class="flex items-center font-semibold mb-3 text-gray-700">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                  </svg>
+                  Tipe Transmisi
+              </h4>
+              <div class="space-y-2 mt-1">
+                  <label class="flex items-center cursor-pointer">
+                      <input type="checkbox" name="transmission[]" value="Manual" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" {{ in_array('Manual', $old_input['transmission'] ?? []) ? 'checked' : '' }}>
+                      <span class="ml-2 text-gray-700">Manual</span>
+                  </label>
+                  <label class="flex items-center cursor-pointer">
+                      <input type="checkbox" name="transmission[]" value="Otomatis" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" {{ in_array('Otomatis', $old_input['transmission'] ?? []) ? 'checked' : '' }}>
+                      <span class="ml-2 text-gray-700">Otomatis</span>
+                  </label>
               </div>
             </div>
+
+            {{-- Jenis Bahan Bakar --}}
             <div class="mb-6">
-              <h4 class="font-semibold mb-3">Jenis Bahan Bakar</h4>
-              <select id="fuel_type" name="fuel_type"
-                class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                <option value="">Semua Jenis</option>
-                <option value="Bensin" {{ ($old_input['fuel_type'] ?? '') == 'Bensin' ? 'selected' : '' }}>Bensin
-                </option>
-                <option value="Solar (Diesel)"
-                  {{ ($old_input['fuel_type'] ?? '') == 'Solar (Diesel)' ? 'selected' : '' }}>
-                  Solar (Diesel)</option>
-                <option value="Listrik" {{ ($old_input['fuel_type'] ?? '') == 'Listrik' ? 'selected' : '' }}>Listrik
-                </option>
-                <option value="Hybrid" {{ ($old_input['fuel_type'] ?? '') == 'Hybrid' ? 'selected' : '' }}>Hybrid
-                </option>
+              <label for="fuel_type" class="flex items-center font-semibold mb-3 text-gray-700">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
+                  Jenis Bahan Bakar
+              </label>
+              <select id="fuel_type" name="fuel_type" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                  <option value="">Semua Jenis</option>
+                  <option value="Bensin" {{ ($old_input['fuel_type'] ?? '') == 'Bensin' ? 'selected' : '' }}>Bensin</option>
+                  <option value="Solar (Diesel)" {{ ($old_input['fuel_type'] ?? '') == 'Solar (Diesel)' ? 'selected' : '' }}>Solar (Diesel)</option>
+                  <option value="Listrik" {{ ($old_input['fuel_type'] ?? '') == 'Listrik' ? 'selected' : '' }}>Listrik</option>
+                  <option value="Hybrid" {{ ($old_input['fuel_type'] ?? '') == 'Hybrid' ? 'selected' : '' }}>Hybrid</option>
               </select>
             </div>
+            
+            {{-- Rentang Harga --}}
             <div class="mb-6">
-              <h4 class="font-semibold mb-3">Rentang Harga</h4>
-              <div class="space-y-4">
-                <div>
-                  <label for="min_price" class="block text-sm font-medium text-gray-700">Min Harga</label>
-                  <input type="number" name="min_price" id="min_price" placeholder="Contoh: 100000"
-                    value="{{ $old_input['min_price'] ?? '' }}"
-                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                <h4 class="flex items-center font-semibold mb-3 text-gray-700">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                  Rentang Harga
+                </h4>
+                <div class="space-y-4 mt-1">
+                  <div>
+                      <label for="min_price" class="block text-sm font-medium text-gray-700">Min Harga</label>
+                      <input type="number" name="min_price" id="min_price" placeholder="Contoh: 100000" value="{{ $old_input['min_price'] ?? '' }}" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                  </div>
+                  <div>
+                      <label for="max_price" class="block text-sm font-medium text-gray-700">Max Harga</label>
+                      <input type="number" name="max_price" id="max_price" placeholder="Contoh: 1000000" value="{{ $old_input['max_price'] ?? '' }}" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                  </div>
                 </div>
-                <div>
-                  <label for="max_price" class="block text-sm font-medium text-gray-700">Max Harga</label>
-                  <input type="number" name="max_price" id="max_price" placeholder="Contoh: 1000000"
-                    value="{{ $old_input['max_price'] ?? '' }}"
-                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                </div>
-              </div>
             </div>
+
+            {{-- Kapasitas Penumpang --}}
             <div>
-              <h4 class="font-semibold mb-3">Kapasitas Penumpang</h4>
-              <div class="space-y-2">
+              <h4 class="flex items-center font-semibold mb-3 text-gray-700">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                  Kapasitas Penumpang
+              </h4>
+              <div class="space-y-2 mt-1">
                 <label class="flex items-center cursor-pointer">
-                  <input type="radio" name="capacity" value=""
-                    class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500"
-                    {{ empty($old_input['capacity']) ? 'checked' : '' }}>
-                  <span class="ml-2 text-gray-700">Semua</span>
+                    <input type="radio" name="capacity" value="" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500" {{ empty($old_input['capacity']) ? 'checked' : '' }}>
+                    <span class="ml-2 text-gray-700">Semua</span>
                 </label>
                 <label class="flex items-center cursor-pointer">
-                  <input type="radio" name="capacity" value="2-4"
-                    class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500"
-                    {{ ($old_input['capacity'] ?? '') == '2-4' ? 'checked' : '' }}>
-                  <span class="ml-2 text-gray-700">2 - 4 orang</span>
+                    <input type="radio" name="capacity" value="2-4" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500" {{ ($old_input['capacity'] ?? '') == '2-4' ? 'checked' : '' }}>
+                    <span class="ml-2 text-gray-700">2 - 4 orang</span>
                 </label>
                 <label class="flex items-center cursor-pointer">
-                  <input type="radio" name="capacity" value="5-7"
-                    class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500"
-                    {{ ($old_input['capacity'] ?? '') == '5-7' ? 'checked' : '' }}>
-                  <span class="ml-2 text-gray-700">5 - 7 orang</span>
+                    <input type="radio" name="capacity" value="5-7" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500" {{ ($old_input['capacity'] ?? '') == '5-7' ? 'checked' : '' }}>
+                    <span class="ml-2 text-gray-700">5 - 7 orang</span>
                 </label>
                 <label class="flex items-center cursor-pointer">
-                  <input type="radio" name="capacity" value=">7"
-                    class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500"
-                    {{ ($old_input['capacity'] ?? '') == '>7' ? 'checked' : '' }}>
-                  <span class="ml-2 text-gray-700">&gt; 7 orang</span>
+                    <input type="radio" name="capacity" value=">7" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500" {{ ($old_input['capacity'] ?? '') == '>7' ? 'checked' : '' }}>
+                    <span class="ml-2 text-gray-700">&gt; 7 orang</span>
                 </label>
               </div>
             </div>
+            
             <button type="submit"
               class="w-full mt-6 bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105">Terapkan
               Filter</button>
@@ -180,7 +208,10 @@
               </div>
             @endforelse
 
-            <div class="flex justify-center pt-8 animate-on-scroll delay-400">
+            <div class="mt-8">
+                {{ $vehicleDatas->appends(request()->query())->links() }}
+            </div>
+            <!-- <div class="flex justify-center pt-8 animate-on-scroll delay-400">
               <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
                 <a href="#"
                   class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
@@ -209,7 +240,7 @@
                   </svg>
                 </a>
               </nav>
-            </div>
+            </div> -->
           </div>
         </section>
       </div>

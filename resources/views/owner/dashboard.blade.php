@@ -7,9 +7,8 @@
       <div class="bg-white p-6 rounded-lg shadow-lg flex items-center justify-between">
         <div>
           <p class="text-sm text-gray-500">Total Iklan Aktif</p>
-          <p
-            class="text-3xl font-bold {{ $ownerQuotas->jumlah_iklan > $ownerQuotas->quota_ads ? 'text-red-600' : 'text-gray-800' }}">
-            {{ $ownerQuotas->jumlah_iklan }} / {{ $ownerQuotas->quota_ads }}
+          <p class="text-xl font-bold {{ ($ownerQuotas?->jumlah_iklan ?? 0) >= ($ownerQuotas?->quota_ads ?? 1) ? 'text-red-500' : 'text-gray-800' }}">
+              {{ $ownerQuotas?->jumlah_iklan ?? 0 }} / {{ $ownerQuotas?->quota_ads ?? 1 }}
           </p>
         </div>
         <div class="bg-indigo-100 text-indigo-600 p-3 rounded-full">
@@ -23,7 +22,7 @@
       <div class="bg-white p-6 rounded-lg shadow-lg flex items-center justify-between">
         <div>
           <p class="text-sm text-gray-500">Total Dilihat</p>
-          <p class="text-3xl font-bold text-gray-800">{{$ownerQuotas->jumlah_lihat}}</p>
+          <p class="text-3xl font-bold text-gray-800">{{ $ownerQuotas?->jumlah_lihat ?? 0 }}</p>
         </div>
         <div class="bg-green-100 text-green-600 p-3 rounded-full">
           <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">

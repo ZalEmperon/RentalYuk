@@ -18,8 +18,14 @@
       </div>
       <div class="bg-white p-6 rounded-lg shadow-lg">
         <p class="text-sm text-gray-500">Pendapatan (Bulan Ini)</p>
-        <p class="text-3xl font-bold text-green-500">Rp 1.550.000</p>
+        <p class="text-3xl font-bold text-green-500">
+          Rp {{ number_format($monthlyRevenue, 0, ',', '.') }}
+        </p>
       </div>
+      <!-- <div class="bg-white p-6 rounded-lg shadow-lg">
+        <p class="text-sm text-gray-500">Pendapatan (Bulan Ini)</p>
+        <p class="text-3xl font-bold text-green-500">Rp 1.550.000</p>
+      </div> -->
     </div>
 
     <!-- Chart and Recent Transactions -->
@@ -29,32 +35,23 @@
         <canvas id="transactionsChart"></canvas>
       </div>
       <div class="bg-white p-6 rounded-lg shadow-lg">
-        <h2 class="text-xl font-semibold mb-4">Pembayaran Terbaru</h2>
-        <ul class="space-y-4">
-          <li class="flex justify-between items-center">
-            <div>
-              <p class="font-semibold text-gray-800">Budi Santoso</p>
-              <p class="text-sm text-gray-500">Paket Super Premium</p>
+        <h3 class="font-semibold text-gray-800 border-b pb-3 mb-4">Pembayaran Terbaru</h3>
+        <div class="space-y-4">
+
+          @forelse ($recentTransactions as $transaction)
+            <div class="flex justify-between items-center">
+              <div>
+                <p class="font-medium text-gray-700">{{ $transaction->user->name }}</p>
+                <p class="text-sm text-gray-500">Paket {{ $transaction->plan->name }}</p>
+              </div>
+              <p class="font-semibold text-green-600">+ Rp {{ number_format($transaction->amount, 0, ',', '.') }}</p>
             </div>
-            <p class="font-bold text-green-600">+ Rp 100.000</p>
-          </li>
-          <li class="flex justify-between items-center">
-            <div>
-              <p class="font-semibold text-gray-800">Joko Susilo</p>
-              <p class="text-sm text-gray-500">Paket Premium</p>
-            </div>
-            <p class="font-bold text-green-600">+ Rp 50.000</p>
-          </li>
-          <li class="flex justify-between items-center">
-            <div>
-              <p class="font-semibold text-gray-800">Siti Aminah</p>
-              <p class="text-sm text-gray-500">Paket Premium</p>
-            </div>
-            <p class="font-bold text-green-600">+ Rp 50.000</p>
-          </li>
-        </ul>
+          @empty
+            <p class="text-sm text-gray-500 text-center py-4">Belum ada pembayaran terbaru.</p>
+          @endforelse
+          
+        </div>
       </div>
-    </div>
   </main>
 @endsection
 

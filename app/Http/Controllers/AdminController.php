@@ -21,8 +21,19 @@ class AdminController extends Controller
             ->selectRaw('(SELECT COUNT(*) FROM vehicles WHERE mod_status = "approve") as jumlah_iklan_approved')
             ->selectRaw('(SELECT COUNT(*) FROM vehicles WHERE mod_status = "waiting") as jumlah_iklan_menunggu')
             ->first();
+
+        $recentTransactions = Transaction::with(['user', 'plan']) 
+            ->where('status', 'success') 
+            ->latest()                   
+            ->take(5)                   
+            ->get();
+
+        $monthlyRevenue = Transaction::where('status', 'success')
+            ->whereYear('created_at', Carbon::now()->year)
+            ->whereMonth('created_at', Carbon::now()->month)
+            ->sum('amount');
         // dd($adminStats);
-        return view('admin.dashboard', compact('adminStats'));
+        return view('admin.dashboard', compact('adminStats', 'recentTransactions', 'monthlyRevenue'));
     }
     public function adminTampilModerasi()
     {
@@ -49,7 +60,7 @@ class AdminController extends Controller
 
     public function adminTampilPaket()
     {
-        $paketDatas = Plan::all()->sortBy('price');
+        $paketDatas = Plan::all()->sortBy('price')->values();
         return view('admin.paket', compact('paketDatas'));
     }
 
@@ -167,5 +178,43 @@ class AdminController extends Controller
             }
         }
         return back()->with('status', 'Status transaksi untuk invoice ' . $transaction->invoice_number . ' berhasil diperbarui.');
+    }
+
+    public function getChartData()
+    {
+        $monthlyData = Transaction::select(
+                DB::raw('YEAR(created_at) as year'),
+                DB::raw('MONTH(created_at) as month'),
+                DB::raw('SUM(amount) as total')
+            )
+            ->where('status', 'success')
+            ->where('created_at', '>=', Carbon::now()->subMonths(5)->startOfMonth()) // Ambil data 6 bulan terakhir
+            ->groupBy('year', 'month')
+            ->orderBy('year', 'asc')
+            ->orderBy('month', 'asc')
+            ->get();
+
+        // Format data untuk Chart.js
+        $labels = [];
+        $data = [];
+        $date = Carbon::now()->subMonths(5)->startOfMonth();
+
+        for ($i = 0; $i < 6; $i++) {
+            $monthData = $monthlyData->first(function ($item) use ($date) {
+                return $item->year == $date->year && $item->month == $date->month;
+            });
+            
+            // Tambahkan nama bulan ke label
+            $labels[] = $date->translatedFormat('F'); // Format nama bulan dalam Bahasa Indonesia
+            // Tambahkan total pendapatan, atau 0 jika tidak ada
+            $data[] = $monthData ? $monthData->total : 0;
+            
+            $date->addMonth();
+        }
+
+        return response()->json([
+            'labels' => $labels,
+            'data' => $data,
+        ]);
     }
 }

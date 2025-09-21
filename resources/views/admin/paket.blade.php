@@ -68,7 +68,7 @@
       <div class="relative bg-white rounded-lg shadow-sm">
         <!-- Modal header -->
         <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-200">
-          <h3 class="text-xl font-semibold text-gray-900">
+          <h3 class="text-xl font-semibold text-gray-900" id="adsTitle">
             Tambah Paket / Plan
           </h3>
           <button type="button"
@@ -138,32 +138,35 @@
 
 @section('custom-js')
   <script>
-    document.querySelectorAll('.add-btn').forEach(button => {
-      button.addEventListener('click', function() {
-        let form = document.getElementById('planForm');
-        let existing = form.querySelector("input[name='_method']");
-        if (existing) existing.remove();
-        form.reset();
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.add-btn').forEach(button => {
+        button.addEventListener('click', function() {
+          let form = document.getElementById('planForm');
+          let existing = form.querySelector("input[name='_method']");
+          if (existing) existing.remove();
+          form.reset();
+        });
       });
-    });
-    document.querySelectorAll('.edit-btn').forEach(button => {
-      button.addEventListener('click', function() {
-        const plan = @json($paketDatas);
-        const id = this.getAttribute('data-id');
-        const v = plan.find(item => item.id == id);
-        document.getElementById('adsName').value = v.name;
-        document.getElementById('adsPrice').value = v.price;
-        document.getElementById('adsQuota').value = v.quota_ads;
-        document.getElementById('adsTime').value = v.duration_days;
-        document.getElementById('adsDesc').innerText = v.description;
+      document.querySelectorAll('.edit-btn').forEach(button => {
+        button.addEventListener('click', function() {
+          const plan = @json($paketDatas);
+          const id = this.getAttribute('data-id');
+          const v = plan.find(item => item.id == id);
+          document.getElementById('adsTitle').innerText = "Edit Paket / Plan";
+          document.getElementById('adsName').value = v.name;
+          document.getElementById('adsPrice').value = v.price;
+          document.getElementById('adsQuota').value = v.quota_ads;
+          document.getElementById('adsTime').value = v.duration_days;
+          document.getElementById('adsDesc').innerText = v.description;
 
-        let form = document.getElementById('planForm');
-        const input = document.createElement("input");
-        input.type = "hidden";
-        input.name = "_method";
-        input.value = "PUT";
-        form.appendChild(input);
-        form.action = "/admin/paket/" + id;
+          let form = document.getElementById('planForm');
+          const input = document.createElement("input");
+          input.type = "hidden";
+          input.name = "_method";
+          input.value = "PUT";
+          form.appendChild(input);
+          form.action = "/admin/paket/" + id;
+        });
       });
     });
   </script>

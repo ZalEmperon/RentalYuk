@@ -112,7 +112,7 @@ class ClientController extends Controller
 
         // Eksekusi query dengan paginasi (10 hasil per halaman)
         $vehicleDatas = $vehicleGets->select('id', 'brand', 'type', 'model', 'city', 'price_per_day', 'transmission', 'capacity', 'fuel_type', 'description', 'is_premium', 'main_photo_url')
-            ->orderBy('is_premium', 'DESC')->latest()->paginate(10);
+            ->orderBy('is_premium', 'DESC')->latest()->paginate(5);
         $searchCount = count($vehicleDatas);
         $old_input = $request->all();
         $city = ucfirst(str_replace('-', ' ', $city));
