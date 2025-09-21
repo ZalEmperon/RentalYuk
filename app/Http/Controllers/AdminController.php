@@ -11,39 +11,42 @@ use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+
 class AdminController extends Controller
 {
-    public function adminTampilDashboard()
+    public function adminTampilDashboard()  
     {
-        $adminStats = DB::table('users')->join('vehicles', 'users.id', '=', 'vehicles.user_id')->where('users.role', '!=','admin')
-        ->select(DB::raw('COUNT(users.id) as jumlah_user'))
-        ->selectRaw('(SELECT COUNT(*) FROM vehicles WHERE mod_status = "approve") as jumlah_iklan_approved')
-        ->selectRaw('(SELECT COUNT(*) FROM vehicles WHERE mod_status = "waiting") as jumlah_iklan_menunggu')
-        ->first();
+        $adminStats = DB::table('users')->join('vehicles', 'users.id', '=', 'vehicles.user_id')->where('users.role', '!=', 'admin')
+            ->select(DB::raw('COUNT(DISTINCT users.id) as jumlah_user'))
+            ->selectRaw('(SELECT COUNT(*) FROM vehicles WHERE mod_status = "approve") as jumlah_iklan_approved')
+            ->selectRaw('(SELECT COUNT(*) FROM vehicles WHERE mod_status = "waiting") as jumlah_iklan_menunggu')
+            ->first();
+        // dd($adminStats);
         return view('admin.dashboard', compact('adminStats'));
     }
     public function adminTampilModerasi()
-    {   
+    {
         $modDatas = Vehicle::with(['user', 'photos'])
             ->whereHas('user', fn(Builder  $q) => $q->where('role', '!=', 'admin'))
             ->where('mod_status', 'waiting')->get();
         $modCounts = count($modDatas);
         return view('admin.moderasi', compact('modDatas', 'modCounts'));
     }
-    
-    public function adminAturModerasi($decision, $id) {
+
+    public function adminAturModerasi($decision, $id)
+    {
         $vehicleData = Vehicle::findOrFail($id);
-        if($vehicleData && $decision == "approve"){
+        if ($vehicleData && $decision == "approve") {
             $vehicleData->status = 'active';
             $vehicleData->mod_status = 'approve';
             $vehicleData->save();
-            return redirect('/admin/moderasi')->with(['status' => $vehicleData->type ." ". $vehicleData->brand ." ". $vehicleData->model ." Telah Disetujui"]);
+            return redirect('/admin/moderasi')->with(['status' => $vehicleData->type . " " . $vehicleData->brand . " " . $vehicleData->model . " Telah Disetujui"]);
         }
         $vehicleData->mod_status = 'reject';
         $vehicleData->save();
-        return redirect('/admin/moderasi')->with(['status' => $vehicleData->type ." ". $vehicleData->brand ." ". $vehicleData->model ." Telah Ditolak"]);
+        return redirect('/admin/moderasi')->with(['status' => $vehicleData->type . " " . $vehicleData->brand . " " . $vehicleData->model . " Telah Ditolak"]);
     }
-    
+
     public function adminTampilPaket()
     {
         $paketDatas = Plan::all()->sortBy('price');
@@ -85,16 +88,16 @@ class AdminController extends Controller
         $planData->duration_days = $request->duration_days ?? null;
         $planData->description = $request->description;
         $planData->save();
-        return redirect('/admin/paket')->with(['status' => "Paket ". $planData->name. " Berhasil Diperbarui"]);
+        return redirect('/admin/paket')->with(['status' => "Paket " . $planData->name . " Berhasil Diperbarui"]);
     }
     public function adminTampilPengguna()
     {
         $userDatas = User::with(['vehicles' => function ($query) {
-            $query->where('mod_status', 'approve'); 
+            $query->where('mod_status', 'approve');
         }])
-        ->withCount(['vehicles as approved_vehicles_count' => function ($query) {
-            $query->where('mod_status', 'approve'); 
-        }])->orderBy('role', 'DESC')->get();
+            ->withCount(['vehicles as approved_vehicles_count' => function ($query) {
+                $query->where('mod_status', 'approve');
+            }])->orderBy('role', 'DESC')->get();
         // dd($userDatas);
         return view('admin.pengguna', compact('userDatas'));
     }
@@ -105,28 +108,6 @@ class AdminController extends Controller
             ->orderByRaw("FIELD(status, 'pending', 'success', 'failed')")
             ->latest()->get();
         return view('admin.transaksi', compact('transactions'));
-    }
-
-    public function adminVerifikasiTransaksi(Request $request, Transaction $transaction)
-    {
-        $request->validate(['status' => 'required|in:success,failed']);
-        $transaction->status = $request->status;
-        $transaction->save();
-
-        // Jika pembayaran sukses, aktifkan paket user
-        if ($request->status == 'success') {
-            $plan = $transaction->plan;
-            $user = $transaction->user;
-            $startDate = Carbon::now();
-            $endDate = $plan->duration_days ? $startDate->copy()->addDays($plan->duration_days) : null;
-
-            UserPlan::updateOrCreate(['user_id' => $user->id], [
-                'plan_id' => $plan->id, 'start_date' => $startDate,
-                'end_date' => $endDate, 'status' => 'active',
-            ]);
-        }
-
-        return back()->with('status', 'Status transaksi ' . $transaction->invoice_number . ' berhasil diperbarui.');
     }
 
     public function adminUpdateStatusTransaksi(Request $request, Transaction $transaction)
@@ -145,14 +126,46 @@ class AdminController extends Controller
             UserPlan::updateOrCreate(
                 ['user_id' => $user->id], // Cari berdasarkan user_id
                 [
-                    'plan_id' => $plan->id, 
-                    'start_date' => now(), 
-                    'end_date' => $endDate, 
+                    'plan_id' => $plan->id,
+                    'start_date' => now(),
+                    'end_date' => $endDate,
                     'status' => 'active'
                 ]
             );
-        }
+            // ✅ Unlock vehicles based on new plan quota
+            $allowedQuota = $plan->quota_ads ?? 1; // default to 1 if null (Free plan)
 
+            // Get all vehicles ordered by created_at DESC (newer first)
+            $vehicles = Vehicle::where('user_id', $user->id)
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            // Take only as many as allowed by quota
+            $allowedVehicles = $vehicles->take($allowedQuota)->pluck('id');
+            $lockedVehicles  = $vehicles->skip($allowedQuota)->pluck('id');
+
+            // Unlock allowed vehicles
+            if ($allowedVehicles->isNotEmpty()) {
+                Vehicle::whereIn('id', $allowedVehicles)
+                    ->where('status', '=', 'locked')
+                    ->where('mod_status', '=', 'locked')
+                    ->update([
+                        'mod_status' => 'approve',
+                        'status' => 'active'
+                    ]);
+            }
+
+            // Keep excess vehicles locked (just to be sure)
+            if ($lockedVehicles->isNotEmpty()) {
+                Vehicle::whereIn('id', $lockedVehicles)
+                    ->where('status', '!=', 'locked')
+                    ->where('mod_status', '!=', 'locked')
+                    ->update([
+                        'mod_status' => 'locked',
+                        'status' => 'locked'
+                    ]);
+            }
+        }
         return back()->with('status', 'Status transaksi untuk invoice ' . $transaction->invoice_number . ' berhasil diperbarui.');
     }
 }

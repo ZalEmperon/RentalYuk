@@ -69,6 +69,14 @@ class ClientController extends Controller
         if ($city != "semua") {
             $vehicleGets->where('city', strtolower($city));
         }
+        // Filter Keyword (brand + model)
+        if ($request->filled('keyword')) {
+            $keyword = $request->keyword;
+            $vehicleGets->where(function ($q) use ($keyword) {
+                $q->where('brand', 'like', "%{$keyword}%")
+                ->orWhere('model', 'like', "%{$keyword}%");
+            });
+        }
         if ($request->filled('lokasi')) {
             $vehicleGets->where('city', 'like', '%' . $request->lokasi . '%');
         }

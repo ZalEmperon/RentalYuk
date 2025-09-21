@@ -24,8 +24,7 @@
 
           <select id="vehicleType"
             class="text-sm rounded-lg block w-full md:w-md p-2.5 bg-gray-800 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500">
-            <option value="" selected>Pilih Jenis</option>
-            <option value="semua">Semua Jenis</option>
+            <option value="kendaraan" selected>Semua Jenis</option>
             <option value="mobil">Mobil</option>
             <option value="motor">Motor</option>
           </select>

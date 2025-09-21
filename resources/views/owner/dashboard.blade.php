@@ -8,7 +8,7 @@
         <div>
           <p class="text-sm text-gray-500">Total Iklan Aktif</p>
           <p
-            class="text-3xl font-bold {{ $ownerQuotas->jumlah_iklan >= $ownerQuotas->quota_ads ? 'text-red-600' : 'text-gray-800' }}">
+            class="text-3xl font-bold {{ $ownerQuotas->jumlah_iklan > $ownerQuotas->quota_ads ? 'text-red-600' : 'text-gray-800' }}">
             {{ $ownerQuotas->jumlah_iklan }} / {{ $ownerQuotas->quota_ads }}
           </p>
         </div>
@@ -22,8 +22,8 @@
       </div>
       <div class="bg-white p-6 rounded-lg shadow-lg flex items-center justify-between">
         <div>
-          <p class="text-sm text-gray-500">Total Dilihat (30 hari)</p>
-          <p class="text-3xl font-bold text-gray-800">1,250</p>
+          <p class="text-sm text-gray-500">Total Dilihat</p>
+          <p class="text-3xl font-bold text-gray-800">{{$ownerQuotas->jumlah_lihat}}</p>
         </div>
         <div class="bg-green-100 text-green-600 p-3 rounded-full">
           <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -63,7 +63,13 @@
                 class="relative {{ $data->mod_status == 'locked' ? 'bg-slate-300 text-slate-800' : ($data->mod_status == 'approve' ? '' : ($data->mod_status == 'reject' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800')) }}">
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="text-sm font-medium text-gray-900">{{ $data->brand }} {{ $data->model }}</div>
-                  <div class="text-sm text-gray-500">{{ $data->city }}</div>
+                  <div class="text-sm text-gray-500 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="me-2" viewBox="0 0 16 16">
+                      <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                      <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+                    </svg>
+                    {{ $data->view_count }}
+                  </div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">Rp. {{ $data->price_per_day }}</td>
                 <td class="px-6 py-4 whitespace-nowrap">

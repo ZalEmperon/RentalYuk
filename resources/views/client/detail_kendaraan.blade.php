@@ -4,7 +4,7 @@
 
 @section('seo_element')
   <meta name="description"
-    content="{{ $vehicleData->type . ' ' . $vehicleData->brand . ' ' . $vehicleData->model . ' : ' . $vehicleData->description }}">
+    content="Temukan {{ $vehicleData->type . ' ' . $vehicleData->brand . ' ' . $vehicleData->model }} di {{ $vehicleData->city }} dengan harga terbaik. Lihat daftar {{ $vehicleData->type }} matic, sport, dan lainnya yang terbaru. Dapatkan {{ $vehicleData->type }} impianmu sekarang!. {{ $vehicleData->description }}">
 
   <script type="application/ld+json">
     {!! $vehicleJsonLd !!}
@@ -146,5 +146,14 @@
         });
       });
     });
+    fetch('/api/vehicles/{{ $vehicleData->id }}/increment-view', {
+        method: 'POST',
+        headers: {
+          'X-CSRF-TOKEN': '{{ csrf_token() }}',
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(res => res.json())
+      .then(data => console.log('New views count:', data.views));
   </script>
 @endsection

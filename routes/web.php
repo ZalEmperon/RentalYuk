@@ -90,8 +90,6 @@ Route::middleware(['auth'])->group(function () {
                 Route::put('/form-iklan/edit/{id}', [OwnerController::class, 'ownerEditIklan']);
                 Route::delete('/form-iklan/delete/{id}', [OwnerController::class, 'ownerHapusIklan']);
 
-                Route::get('/transaksi', [OwnerController::class, 'ownerTampilTransaksi']);
-
                 Route::get('/pengaturan', [OwnerController::class, 'ownerTampilProfil']);
                 Route::put('/pengaturan', [OwnerController::class, 'ownerAturProfil']);
                 Route::put('/pengaturan/pass', [OwnerController::class, 'ownerAturPass']);
@@ -103,16 +101,15 @@ Route::middleware(['auth'])->group(function () {
 
             Route::get('/moderasi', [AdminController::class, 'adminTampilModerasi']);
             Route::put('/moderasi/{decision}-{id}', [AdminController::class, 'adminAturModerasi']);
-            
+
             Route::get('/transaksi/{$id}', [AdminController::class, 'ownerTampilTransaksi']);
             Route::post('/transaksi/{$id}', [AdminController::class, 'ownerTampilTransaksi']);
-            
+
             Route::get('/paket', [AdminController::class, 'adminTampilPaket']);
             Route::post('/paket', [AdminController::class, 'adminAturPaket']);
             Route::put('/paket/{id}', [AdminController::class, 'adminEditPaket']);
-            
+
             Route::get('/transaksi', [AdminController::class, 'adminTampilTransaksi'])->name('admin.transaksi.index');
-            Route::put('/transaksi/{transaction}/update-status', [AdminController::class, 'adminVerifikasiTransaksi'])->name('admin.transaksi.verifikasi');
             Route::put('/transaksi/{transaction}/update-status', [AdminController::class, 'adminUpdateStatusTransaksi'])->name('admin.transaksi.update');
             Route::get('/userlist', [AdminController::class, 'adminTampilPengguna']);
         });
