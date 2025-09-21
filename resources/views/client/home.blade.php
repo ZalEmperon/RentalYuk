@@ -4,59 +4,7 @@
 
 
 @section('page-content')
-
-  {{-- Data dummy untuk simulasi dari database --}}
-  @php
-    $cars = [
-        [
-            'nama' => 'Toyota Avanza',
-            'spek1' => 'Manual',
-            'spek2' => '7 Kursi',
-            'harga' => '350.000',
-            'img_placeholder' => 'https://placehold.co/600x400/3498db/ffffff?text=Toyota+Avanza',
-        ],
-        [
-            'nama' => 'Honda Brio',
-            'spek1' => 'Matic',
-            'spek2' => '5 Kursi',
-            'harga' => '300.000',
-            'img_placeholder' => 'https://placehold.co/600x400/e74c3c/ffffff?text=Honda+Brio',
-        ],
-        [
-            'nama' => 'Mitsubishi Pajero',
-            'spek1' => 'Matic',
-            'spek2' => '7 Kursi',
-            'harga' => '750.000',
-            'img_placeholder' => 'https://placehold.co/600x400/2c3e50/ffffff?text=Mitsubishi+Pajero',
-        ],
-    ];
-    $motorDatascycles = [
-        [
-            'nama' => 'Yamaha NMAX',
-            'spek1' => '155cc',
-            'spek2' => 'Matic',
-            'harga' => '150.000',
-            'img_placeholder' => 'https://placehold.co/600x400/1abc9c/ffffff?text=Yamaha+NMAX',
-        ],
-        [
-            'nama' => 'Honda PCX',
-            'spek1' => '160cc',
-            'spek2' => 'Matic',
-            'harga' => '160.000',
-            'img_placeholder' => 'https://placehold.co/600x400/d35400/ffffff?text=Honda+PCX',
-        ],
-        [
-            'nama' => 'Kawasaki KLX',
-            'spek1' => '150cc',
-            'spek2' => 'Manual',
-            'harga' => '200.000',
-            'img_placeholder' => 'https://placehold.co/600x400/27ae60/ffffff?text=Kawasaki+KLX',
-        ],
-    ];
-  @endphp
-
   <main class="animated-main-background">
-
     {{-- Hero Section dengan Latar Belakang Silver Geometris --}}
     <section class="relative text-center py-20 md:py-32 overflow-hidden bg-slate-900/50 text-white" id="hero-section">
       <div class="absolute inset-0 z-0 opacity-5"
@@ -72,7 +20,16 @@
           Temukan kendaraan yang tepat untuk perjalanan Anda dengan mudah, cepat, dan aman.
         </p>
         <div
-          class="mt-8 max-w-2xl mx-auto bg-white/10 backdrop-blur-sm p-4 rounded-xl shadow-2xl border border-white/20 flex flex-col md:flex-row items-center gap-4 animate-fade-in-up delay-400">
+          class="mt-8 max-w-4xl mx-auto bg-white/10 backdrop-blur-sm p-4 rounded-xl shadow-2xl border border-white/20 flex flex-col md:flex-row items-center gap-4 animate-fade-in-up delay-400">
+
+          <select id="vehicleType"
+            class="text-sm rounded-lg block w-full md:w-md p-2.5 bg-gray-800 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500">
+            <option value="" selected>Pilih Jenis</option>
+            <option value="semua">Semua Jenis</option>
+            <option value="mobil">Mobil</option>
+            <option value="motor">Motor</option>
+          </select>
+
           <div class="relative w-full">
             <svg class="w-6 h-6 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none"
               stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -81,12 +38,14 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z">
               </path>
             </svg>
-            <input type="text" placeholder="Masukkan kota atau lokasi (e.g., Surabaya)"
+            <input type="text" id="cityInput" placeholder="Masukkan kota atau lokasi (e.g., Surabaya)"
               class="w-full pl-12 pr-4 py-3 bg-slate-800/50 text-white placeholder-slate-400 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors">
           </div>
-          <button
-            class="w-full md:w-auto bg-indigo-600 text-white px-8 py-3 rounded-lg hover:bg-indigo-500 transition-all duration-300 font-semibold shrink-0 shadow-lg hover:scale-105 transform">Cari
-            Kendaraan</button>
+
+          <button id="searchBtn"
+            class="w-full md:w-auto bg-indigo-600 text-white px-8 py-3 rounded-lg hover:bg-indigo-500 transition-all duration-300 font-semibold shrink-0 shadow-lg hover:scale-105 transform">
+            Cari Kendaraan
+          </button>
         </div>
       </div>
     </section>
@@ -152,7 +111,8 @@
             <div
               class="bg-white rounded-xl shadow-lg overflow-hidden group animate-on-scroll delay-{{ $loop->iteration * 100 }}">
               <div class="overflow-hidden">
-              <img src="{{ $data->main_photo_url ? asset('storage/photo/' . $data->type . '/' . $data->main_photo_url) : 'https://placehold.co/600x400/1abc9c/ffffff?text=No+Image' }}"
+                <img
+                  src="{{ $data->main_photo_url ? asset('storage/photo/' . $data->type . '/' . $data->main_photo_url) : 'https://placehold.co/600x400/1abc9c/ffffff?text=No+Image' }}"
                   alt="{{ $data->brand }} {{ $data->model }}"
                   class="w-full h-56 object-cover transform group-hover:scale-110 transition-transform duration-700 ease-in-out">
               </div>
@@ -198,7 +158,8 @@
             <div
               class="bg-white rounded-xl shadow-lg overflow-hidden group animate-on-scroll delay-{{ $loop->iteration * 100 }}">
               <div class="overflow-hidden">
-              <img src="{{ $data->main_photo_url ? asset('storage/photo/' . $data->type . '/' . $data->main_photo_url) : 'https://placehold.co/600x400/3498db/ffffff?text=No+Image' }}"
+                <img
+                  src="{{ $data->main_photo_url ? asset('storage/photo/' . $data->type . '/' . $data->main_photo_url) : 'https://placehold.co/600x400/3498db/ffffff?text=No+Image' }}"
                   alt="{{ $data->brand }} {{ $data->model }}"
                   class="w-full h-56 object-cover transform group-hover:scale-110 transition-transform duration-700 ease-in-out">
               </div>
@@ -403,6 +364,19 @@
       document.querySelectorAll('.animate-on-scroll').forEach(element => {
         observer.observe(element);
       });
+    });
+    document.getElementById('searchBtn').addEventListener('click', function() {
+      const type = document.getElementById('vehicleType').value;
+      const city = document.getElementById('cityInput').value.trim();
+
+      // Convert city to lowercase, replace spaces with hyphens for a clean URL
+      const citySlug = city ? city.toLowerCase().replace(/\s+/g, '-') : 'semua';
+
+      // Build URL like /sewa-mobil-jakarta or /sewa-semua
+      let targetUrl = '/sewa-' + (type || 'semua') + '-' + citySlug;
+
+      // Redirect to that page
+      window.location.href = targetUrl;
     });
   </script>
 @endsection

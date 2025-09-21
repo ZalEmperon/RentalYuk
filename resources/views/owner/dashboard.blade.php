@@ -7,7 +7,8 @@
       <div class="bg-white p-6 rounded-lg shadow-lg flex items-center justify-between">
         <div>
           <p class="text-sm text-gray-500">Total Iklan Aktif</p>
-          <p class="text-3xl font-bold text-gray-800">
+          <p
+            class="text-3xl font-bold {{ $ownerQuotas->jumlah_iklan >= $ownerQuotas->quota_ads ? 'text-red-600' : 'text-gray-800' }}">
             {{ $ownerQuotas->jumlah_iklan }} / {{ $ownerQuotas->quota_ads }}
           </p>
         </div>
@@ -59,49 +60,46 @@
             <!-- Row 1 -->
             @foreach ($ownerDatas as $data)
               <tr
-                class="{{ $data->mod_status == 'approve' ? '' : ($data->mod_status == 'reject' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800') }}">
+                class="relative {{ $data->mod_status == 'locked' ? 'bg-slate-300 text-slate-800' : ($data->mod_status == 'approve' ? '' : ($data->mod_status == 'reject' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800')) }}">
                 <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="flex items-center">
-                    <div class="flex-shrink-0 h-10 w-10">
-                      <img class="h-10 w-10 rounded-md object-cover"
-                        src="https://placehold.co/100x100/3498db/ffffff?text=AV" alt="">
-                    </div>
-                    <div class="ml-4">
-                      <div class="text-sm font-medium text-gray-900">{{ $data->brand }} {{ $data->model }}</div>
-                      <div class="text-sm text-gray-500">{{ $data->city }}</div>
-                    </div>
-                  </div>
+                  <div class="text-sm font-medium text-gray-900">{{ $data->brand }} {{ $data->model }}</div>
+                  <div class="text-sm text-gray-500">{{ $data->city }}</div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">Rp. {{ $data->price_per_day }}</td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   @if ($data->mod_status != 'approve')
                     <span
-                      class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full {{ $data->mod_status == 'reject' ? 'bg-red-200 text-red-800' : 'bg-yellow-200 text-yellow-800' }}">{{ $data->mod_status == 'reject' ? 'Ditolak' : 'Menunggu' }}</span>
+                      class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full {{ $data->mod_status == 'locked' ? 'bg-gray-200 text-gray-800' : ($data->mod_status == 'reject' ? 'bg-red-200 text-red-800' : 'bg-yellow-200 text-yellow-800') }}">{{ $data->mod_status == 'locked' ? 'Terkunci' : ($data->mod_status == 'reject' ? 'Ditolak' : 'Menunggu') }}</span>
                   @else
                     <span
-                      class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full {{ $data->status == 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' }}">{{ $data->status == 'active' ? 'Aktif' : 'Tidak Aktif' }}</span>
+                      class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full {{ $data->status == 'locked' ? 'bg-gray-100 text-gray-800' : ($data->status == 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800') }}">{{ $data->status == 'locked' ? 'Terkunci' : ($data->status == 'active' ? 'Aktif' : 'Tidak Aktif') }}</span>
                   @endif
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-3">
-                  <a href="/owner/form-iklan/edit/{{ $data->id }}"
-                    class="text-indigo-600 hover:text-indigo-900">Edit</a>
-                  <button type="button" data-modal-target="popup-modal" data-modal-toggle="popup-modal"
-                    data-id="{{ $data->id }}" class="delete-btn text-red-600 hover:text-red-900">Hapus</button>
-                  @if ($data->mod_status == 'approve')
-                    <form action="/owner/ad-switch/{{ $data->id }}" method="POST" class="inline">
-                      @csrf
-                      @method('PUT')
-                      <button type="submit"
-                        class="text-yellow-600 {{ $data->status == 'active' ? 'hover:text-green-900' : 'hover:text-yellow-900' }}">
-                        {{ $data->status == 'active' ? 'Nonaktifkan' : 'Aktifkan' }}</button>
-                    </form>
-                  @elseif ($data->mod_status == 'reject')
-                    <form action="/owner/ad-resubmit/{{ $data->id }}" method="POST" class="inline">
-                      @csrf
-                      @method('PUT')
-                      <button type="submit" class="text-green-600 hover:text-green-900">
-                        Ajukan Kembali</button>
-                    </form>
+                  @if ($data->mod_status == 'locked' && $data->status == 'locked')
+                    <button type="button" data-modal-target="popup-modal" data-modal-toggle="popup-modal"
+                      data-id="{{ $data->id }}" class="delete-btn text-red-600 hover:text-red-900">Hapus</button>
+                  @else
+                    <a href="/owner/form-iklan/edit/{{ $data->id }}"
+                      class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                    <button type="button" data-modal-target="popup-modal" data-modal-toggle="popup-modal"
+                      data-id="{{ $data->id }}" class="delete-btn text-red-600 hover:text-red-900">Hapus</button>
+                    @if ($data->mod_status == 'approve')
+                      <form action="/owner/ad-switch/{{ $data->id }}" method="POST" class="inline">
+                        @csrf
+                        @method('PUT')
+                        <button type="submit"
+                          class="text-yellow-600 {{ $data->status == 'active' ? 'hover:text-green-900' : 'hover:text-yellow-900' }}">
+                          {{ $data->status == 'active' ? 'Nonaktifkan' : 'Aktifkan' }}</button>
+                      </form>
+                    @elseif ($data->mod_status == 'reject')
+                      <form action="/owner/ad-resubmit/{{ $data->id }}" method="POST" class="inline">
+                        @csrf
+                        @method('PUT')
+                        <button type="submit" class="text-green-600 hover:text-green-900">
+                          Ajukan Kembali</button>
+                      </form>
+                    @endif
                   @endif
                 </td>
               </tr>

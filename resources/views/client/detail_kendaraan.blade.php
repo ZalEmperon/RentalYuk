@@ -2,6 +2,15 @@
 
 @section('title', 'Detail ' . $vehicleData->brand . ' ' . $vehicleData->model)
 
+@section('seo_element')
+  <meta name="description"
+    content="{{ $vehicleData->type . ' ' . $vehicleData->brand . ' ' . $vehicleData->model . ' : ' . $vehicleData->description }}">
+
+  <script type="application/ld+json">
+    {!! $vehicleJsonLd !!}
+  </script>
+@endsection
+
 @section('page-content')
   <main class="container mx-auto px-6 py-8">
     <nav class="text-sm mb-4">
@@ -95,8 +104,17 @@
             <p class="text-2xl font-bold text-indigo-600">Rp
               {{ number_format($vehicleData->price_per_day, 0, ',', '.') }} <span
                 class="text-base font-normal text-gray-600">/ hari</span></p>
-            <a href="https://wa.me/{{ $vehicleData->user->phone }}?text=Halo, saya tertarik untuk menyewa {{ $vehicleData->brand }} {{ $vehicleData->model }} dari RentalYuk."
-              target="_blank"
+            @php
+              $whatsapp_message = urlencode(
+                  'Halo, saya tertarik untuk menyewa ' .
+                      $vehicleData->brand .
+                      ' ' .
+                      $vehicleData->model .
+                      ' dari RentalYuk.',
+              );
+              $whatsapp_link = 'https://wa.me/' . $vehicleData->user->phone . '?text=' . $whatsapp_message;
+            @endphp
+            <a href="{{ $whatsapp_link }}" target="_blank"
               class="w-full mt-4 bg-green-500 text-white py-3 rounded-lg font-semibold text-lg hover:bg-green-600 transition duration-300 flex items-center justify-center">
               <svg class="w-6 h-6 mr-2" ...></svg>
               Hubungi via WhatsApp

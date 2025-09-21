@@ -54,7 +54,7 @@
         <div>
           <label for="phone" class="block text-sm font-medium text-gray-200">Nomor WhatsApp</label>
           <div class="mt-1">
-            <input id="phone" name="phone" type="tel" required placeholder="08..."
+            <input id="phone" name="phone" type="tel" required placeholder="Gunakan awalan 62 (62818...)"
               class="w-full px-4 py-3 bg-white text-gray-900 placeholder-gray-400 border border-gray-400/50 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition">
           </div>
         </div>

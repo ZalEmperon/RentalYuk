@@ -18,4 +18,8 @@ class Plan extends Model
     {
         return $this->hasMany(UserPlan::class);
     }
+    public function transaction()
+    {
+        return $this->hasMany(Plan::class);
+    }
 }

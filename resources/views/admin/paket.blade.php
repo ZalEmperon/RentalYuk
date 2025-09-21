@@ -47,7 +47,8 @@
                   @endif
                 </td>
                 <td class="px-6 py-4 space-x-2">
-                  <button data-id="{{ $data->id }}" type="button" data-modal-target="default-modal" data-modal-toggle="default-modal" class="edit-btn text-indigo-600 hover:text-indigo-900">Edit</button>
+                  <button data-id="{{ $data->id }}" type="button" data-modal-target="default-modal"
+                    data-modal-toggle="default-modal" class="edit-btn text-indigo-600 hover:text-indigo-900">Edit</button>
                 </td>
               </tr>
             @endforeach
@@ -112,7 +113,7 @@
                 <label for="adsTime" class="block mb-2 text-sm font-medium text-gray-900">Waktu Berlaku Paket</label>
                 <input type="number" id="adsTime" name="duration_days"
                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                  placeholder="Berlaku selamanya jika tidak diisi"/>
+                  placeholder="Berlaku selamanya jika tidak diisi" />
               </div>
             </div>
             <div class="mb-5">
@@ -136,34 +137,34 @@
 @endsection
 
 @section('custom-js')
-<script>
-  document.querySelectorAll('.add-btn').forEach(button => {
-    button.addEventListener('click', function() {
-      let form = document.getElementById('planForm');
-      let existing = form.querySelector("input[name='_method']");
-      if (existing) existing.remove();
-      form.reset(); 
+  <script>
+    document.querySelectorAll('.add-btn').forEach(button => {
+      button.addEventListener('click', function() {
+        let form = document.getElementById('planForm');
+        let existing = form.querySelector("input[name='_method']");
+        if (existing) existing.remove();
+        form.reset();
+      });
     });
-  });
-  document.querySelectorAll('.edit-btn').forEach(button => {
-    button.addEventListener('click', function() {
-      const plan = @json($paketDatas);
-      const id = this.getAttribute('data-id');
-      const v = plan.find(item => item.id == id);
-      document.getElementById('adsName').value = v.name;
-      document.getElementById('adsPrice').value = v.price;
-      document.getElementById('adsQuota').value = v.quota_ads;
-      document.getElementById('adsTime').value = v.duration_days;
-      document.getElementById('adsDesc').innerText = v.description;
+    document.querySelectorAll('.edit-btn').forEach(button => {
+      button.addEventListener('click', function() {
+        const plan = @json($paketDatas);
+        const id = this.getAttribute('data-id');
+        const v = plan.find(item => item.id == id);
+        document.getElementById('adsName').value = v.name;
+        document.getElementById('adsPrice').value = v.price;
+        document.getElementById('adsQuota').value = v.quota_ads;
+        document.getElementById('adsTime').value = v.duration_days;
+        document.getElementById('adsDesc').innerText = v.description;
 
-      let form = document.getElementById('planForm');
-      const input = document.createElement("input");
-      input.type = "hidden";
-      input.name = "_method";
-      input.value = "PUT";
-      form.appendChild(input);
-      form.action = "/admin/paket/" + id;
+        let form = document.getElementById('planForm');
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = "_method";
+        input.value = "PUT";
+        form.appendChild(input);
+        form.action = "/admin/paket/" + id;
+      });
     });
-  });
-</script>
+  </script>
 @endsection
