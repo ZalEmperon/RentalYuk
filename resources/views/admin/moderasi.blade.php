@@ -1,15 +1,15 @@
 @extends('admin.components.base')
 
 @section('page-content')
-  {{-- Bagian ini TIDAK DIUBAH sesuai permintaan Anda --}}
-  <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
-    <div class="bg-white rounded-lg shadow-lg">
+  {{-- [MODIFIKASI] Latar belakang utama diubah menjadi slate-100 yang lebih cerah --}}
+  <main class="flex-1 overflow-x-hidden overflow-y-auto bg-slate-100 p-6">
+    <div class="bg-white rounded-2xl shadow-xl">
       <div class="p-6 border-b">
         <h2 class="text-xl font-semibold text-gray-800">Iklan Menunggu Persetujuan ({{ $modCounts }})</h2>
       </div>
       <div class="overflow-x-auto">
         <table class="w-full">
-          <thead class="bg-gray-50">
+          <thead class="bg-slate-50">
             <tr>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pemilik</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kendaraan</th>
@@ -19,7 +19,8 @@
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
             @foreach ($modDatas as $data)
-              <tr>
+              {{-- [MODIFIKASI] Setiap baris diberi animasi pop-out --}}
+              <tr class="animate-on-scroll" style="--delay: {{ $loop->index * 100 }}ms;">
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="text-sm font-medium text-gray-900">{{ $data->user->name }}</div>
                   <div class="text-sm text-gray-500">{{ $data->user->email }}</div>
@@ -28,13 +29,15 @@
                   <div class="text-sm font-medium text-gray-900">{{ $data->brand }} {{ $data->model }}</div>
                   <div class="text-sm text-gray-500">{{ $data->city }}</div>
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{{ $data->created_at }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{{ $data->created_at->format('d M Y, H:i') }}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                  <button data-modal-target="popup-modal" data-modal-toggle="popup-modal" data-id="{{ $data->id }}" class="decision-btn-approve bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600 text-xs">Setujui</button>
-                  <button data-modal-target="popup-modal" data-modal-toggle="popup-modal" data-id="{{ $data->id }}" class="decision-btn-reject bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 text-xs">Tolak</button>
+                  <button data-modal-target="popup-modal" data-modal-toggle="popup-modal" data-id="{{ $data->id }}" class="decision-btn-approve bg-green-100 text-green-800 px-3 py-1 rounded-md hover:bg-green-200 text-xs font-semibold transition-colors">Setujui</button>
+                  <button data-modal-target="popup-modal" data-modal-toggle="popup-modal" data-id="{{ $data->id }}" class="decision-btn-reject bg-red-100 text-red-800 px-3 py-1 rounded-md hover:bg-red-200 text-xs font-semibold transition-colors">Tolak</button>
                   <button type="button" data-id="{{ $data->id }}" data-modal-target="default-modal"
-                    data-modal-toggle="default-modal" class="detail-btn text-indigo-600 hover:text-indigo-900 text-xs">Lihat
-                    Detail</button>
+                    data-modal-toggle="default-modal" class="detail-btn text-indigo-600 hover:text-indigo-900 text-xs font-semibold inline-flex items-center gap-1">
+                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" /><path fill-rule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" /></svg>
+                    Detail
+                  </button>
                 </td>
               </tr>
             @endforeach
@@ -49,9 +52,10 @@
   {{-- ======================================================= --}}
   {{-- MODAL DETAIL KENDARAAN (DESAIN BARU) --}}
   {{-- ======================================================= --}}
-  <div id="default-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-full max-h-full bg-black bg-opacity-60">
+  {{-- [MODIFIKASI] Latar belakang modal diubah menjadi semi-transparan dengan backdrop-blur --}}
+  <div id="default-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-full max-h-full bg-black/60 backdrop-blur-sm">
     <div class="relative p-4 w-full max-w-4xl max-h-full">
-      <div class="relative bg-slate-50 rounded-2xl shadow-lg">
+      <div class="relative bg-slate-50 rounded-2xl shadow-lg animate-on-modal-open">
         {{-- Modal Header --}}
         <div class="flex items-start justify-between p-5 border-b rounded-t">
           <div>
@@ -67,36 +71,36 @@
         {{-- Modal Body --}}
         <div class="p-5 space-y-6 max-h-[70vh] overflow-y-auto">
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {{-- Kolom Kiri: Galeri & Info Dasar --}}
-              <div>
-                  <div class="mb-4">
-                      <img id="mainImageModal" src="" alt="Gambar Utama" class="w-full aspect-video object-cover rounded-xl mb-3 border">
-                      <div class="grid grid-cols-5 gap-2" id="detailImage"></div>
-                  </div>
-                  <div class="bg-white p-4 rounded-xl border space-y-2 text-sm">
-                      <div class="flex justify-between"><span class="text-slate-500">Merek:</span><strong class="text-slate-800" id="detailBrand"></strong></div>
-                      <div class="flex justify-between"><span class="text-slate-500">Model:</span><strong class="text-slate-800" id="detailModel"></strong></div>
-                      <div class="flex justify-between"><span class="text-slate-500">Tahun:</span><strong class="text-slate-800" id="detailYear"></strong></div>
-                      <div class="flex justify-between"><span class="text-slate-500">Tipe:</span><strong class="text-slate-800" id="detailType"></strong></div>
-                  </div>
+            {{-- Kolom Kiri: Galeri & Info Dasar --}}
+            <div>
+              <div class="mb-4">
+                <img id="mainImageModal" src="" alt="Gambar Utama" class="w-full aspect-video object-cover rounded-xl mb-3 border-2 border-white shadow-lg">
+                <div class="grid grid-cols-5 gap-2" id="detailImage"></div>
               </div>
-              
-              {{-- Kolom Kanan: Spesifikasi, Deskripsi, dll. --}}
-              <div class="space-y-5">
-                  <div class="bg-white p-4 rounded-xl border">
-                      <h4 class="text-lg font-semibold text-slate-800 mb-3">Spesifikasi</h4>
-                      <div class="flex flex-wrap gap-3">
-                          <span class="spec-tag-modal" id="detailTransmission"></span>
-                          <span class="spec-tag-modal" id="detailCapacity"></span>
-                          <span class="spec-tag-modal" id="detailFuel_type"></span>
-                      </div>
-                  </div>
-                  <div class="bg-white p-4 rounded-xl border">
-                      <h4 class="text-lg font-semibold text-slate-800 mb-2">Alamat & Deskripsi</h4>
-                      <p class="text-sm text-slate-600 leading-relaxed font-semibold" id="detailAddress"></p>
-                      <p class="text-sm text-slate-600 leading-relaxed mt-1" id="detailDescription"></p>
-                  </div>
+              <div class="bg-white p-4 rounded-xl border space-y-2 text-sm">
+                <div class="flex justify-between"><span class="text-slate-500">Merek:</span><strong class="text-slate-800" id="detailBrand"></strong></div>
+                <div class="flex justify-between"><span class="text-slate-500">Model:</span><strong class="text-slate-800" id="detailModel"></strong></div>
+                <div class="flex justify-between"><span class="text-slate-500">Tahun:</span><strong class="text-slate-800" id="detailYear"></strong></div>
+                <div class="flex justify-between"><span class="text-slate-500">Tipe:</span><strong class="text-slate-800" id="detailType"></strong></div>
               </div>
+            </div>
+            
+            {{-- Kolom Kanan: Spesifikasi, Deskripsi, dll. --}}
+            <div class="space-y-5">
+              <div class="bg-white p-4 rounded-xl border">
+                <h4 class="text-lg font-semibold text-slate-800 mb-3">Spesifikasi</h4>
+                <div class="flex flex-wrap gap-3">
+                  <span class="spec-tag-modal" id="detailTransmission"></span>
+                  <span class="spec-tag-modal" id="detailCapacity"></span>
+                  <span class="spec-tag-modal" id="detailFuel_type"></span>
+                </div>
+              </div>
+              <div class="bg-white p-4 rounded-xl border">
+                <h4 class="text-lg font-semibold text-slate-800 mb-2">Alamat & Deskripsi</h4>
+                <p class="text-sm text-slate-600 leading-relaxed font-semibold" id="detailAddress"></p>
+                <p class="text-sm text-slate-600 leading-relaxed mt-1" id="detailDescription"></p>
+              </div>
+            </div>
           </div>
         </div>
         
@@ -104,10 +108,10 @@
         <div class="flex items-center justify-between p-5 border-t border-slate-200 rounded-b bg-white">
           <p class="text-2xl font-bold text-indigo-600" id="detailPriceperday"></p>
           <div class="flex items-center gap-2">
-            <button data-modal-target="popup-modal" data-modal-toggle="popup-modal" id="modalRejectBtn" class="decision-btn-reject text-sm px-4 py-2 rounded-lg font-semibold bg-red-100 text-red-700 hover:bg-red-200">
+            <button data-modal-target="popup-modal" data-modal-toggle="popup-modal" id="modalRejectBtn" class="decision-btn-reject text-sm px-4 py-2 rounded-lg font-semibold bg-red-100 text-red-700 hover:bg-red-200 transition-colors">
                 Tolak
             </button>
-            <button data-modal-target="popup-modal" data-modal-toggle="popup-modal" id="modalApproveBtn" class="decision-btn-approve text-sm px-4 py-2 rounded-lg font-semibold bg-green-100 text-green-700 hover:bg-green-200">
+            <button data-modal-target="popup-modal" data-modal-toggle="popup-modal" id="modalApproveBtn" class="decision-btn-approve text-sm px-4 py-2 rounded-lg font-semibold bg-green-500 text-white hover:bg-green-600 transition-colors transform hover:scale-105">
                 Setujui
             </button>
           </div>
@@ -119,7 +123,7 @@
   {{-- Modal Konfirmasi (Tetap sama) --}}
   <div id="popup-modal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-[100] justify-center items-center w-full md:inset-0 h-full max-h-full bg-black bg-opacity-50">
     <div class="relative p-4 w-full max-w-md max-h-full">
-      <div class="relative bg-white rounded-lg shadow-sm">
+      <div class="relative bg-white rounded-lg shadow-sm animate-on-modal-open">
         <button type="button" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-hide="popup-modal">
           <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" /></svg>
           <span class="sr-only">Close modal</span>
@@ -141,26 +145,44 @@
 
 @section('custom-css')
 <style>
-    .spec-tag-modal {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        background-color: #f1f5f9; /* slate-100 */
-        color: #334155; /* slate-700 */
-        padding: 0.5rem 1rem;
-        border-radius: 9999px;
-        font-size: 0.875rem; /* text-sm */
-        font-weight: 500;
-    }
-    .modal-thumbnail.active {
-        outline: 2px solid #4f46e5; /* indigo-600 */
-        outline-offset: 2px;
-    }
+  /* Gaya untuk spesifikasi di dalam modal */
+  .spec-tag-modal {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background-color: #f1f5f9; /* slate-100 */
+      color: #334155; /* slate-700 */
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      font-size: 0.875rem; /* text-sm */
+      font-weight: 500;
+  }
+  .modal-thumbnail.active {
+      outline: 2px solid #4f46e5; /* indigo-600 */
+      outline-offset: 2px;
+  }
+
+  /* [TAMBAHAN] Keyframes untuk animasi "pop out" */
+  @keyframes pop-in {
+    from { opacity: 0; transform: translateY(20px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .animate-on-scroll {
+    opacity: 0;
+    animation: pop-in 0.6s ease-out forwards;
+    animation-delay: var(--delay, 0ms);
+  }
+
+  .animate-on-modal-open {
+    animation: pop-in 0.4s ease-out;
+  }
 </style>
 @endsection
 
 @section('custom-js')
   <script>
+    // Seluruh kode JavaScript Anda yang sudah ada tetap sama, tidak perlu diubah.
     document.addEventListener('DOMContentLoaded', function() {
       const vehicles = @json($modDatas);
       
@@ -261,4 +283,3 @@
     });
   </script>
 @endsection
-
