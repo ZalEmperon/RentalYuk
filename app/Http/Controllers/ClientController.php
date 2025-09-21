@@ -60,14 +60,12 @@ class ClientController extends Controller
     public function clientTampilPencarian(Request $request, $type, $city)
     {
         $vehicleGets = Vehicle::query();
-        $vehicleGets->with(['photos' => function ($q) {
-            $q->select('vehicle_id', 'photo_url')->limit(1);
-        }])->where('status', 'active')->where('mod_status', 'approve');
+        $vehicleGets->where('status', 'active')->where('mod_status', 'approve');
         if ($type != "kendaraan") {
             $vehicleGets->where('type', $type);
         }
         if ($city != "semua") {
-            $vehicleGets->where('city', strtolower($city));
+            $vehicleGets->where('city', strtolower(str_replace('-', ' ', $city)));
         }
         // Filter Keyword (brand + model)
         if ($request->filled('keyword')) {
@@ -80,7 +78,7 @@ class ClientController extends Controller
         if ($request->filled('lokasi')) {
             $vehicleGets->where('city', 'like', '%' . $request->lokasi . '%');
         }
-
+        
         // 2. Filter berdasarkan Tipe Transmisi (dari sidebar)  
         if ($request->filled('transmission')) {
             // $request->transmission akan berisi array ['Manual', 'Matic'] jika keduanya dicentang
@@ -113,10 +111,11 @@ class ClientController extends Controller
         }
 
         // Eksekusi query dengan paginasi (10 hasil per halaman)
-        $vehicleDatas = $vehicleGets->select('id', 'brand', 'type', 'model', 'city', 'price_per_day', 'transmission', 'capacity', 'fuel_type', 'description', 'is_premium')
+        $vehicleDatas = $vehicleGets->select('id', 'brand', 'type', 'model', 'city', 'price_per_day', 'transmission', 'capacity', 'fuel_type', 'description', 'is_premium', 'main_photo_url')
             ->orderBy('is_premium', 'DESC')->latest()->paginate(10);
         $searchCount = count($vehicleDatas);
         $old_input = $request->all();
+        $city = ucfirst(str_replace('-', ' ', $city));
         return view('client.hasil_pencarian', compact('vehicleDatas', 'type', 'city', 'searchCount', 'old_input'));
     }
 }

@@ -26,19 +26,19 @@
             <h3 class="text-xl font-semibold mb-4 border-b pb-3 text-gray-800">Filter Pencarian</h3>
             <div class="mb-6">
               <h4 for="keyword" class="font-semibold mb-3">Nama Kendaraan/Brand</h4>
-              <input type="text" name="keyword" id="keyword" placeholder="Contoh: Honda"
+              <input type="text" name="keyword" id="keyword" placeholder="Contoh: Honda atau Karisma"
                 value="{{ $old_input['keyword'] ?? '' }}"
                 class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
             </div>
             <div class="mb-6">
               <h4 for="city" class="font-semibold mb-3">Lokasi Kota/Daerah</h4>
-              <input type="text" name="city" id="city" placeholder="Contoh: Surabaya"
+              <input type="text" id="city" placeholder="Contoh: Surabaya"
                 value="{{ $city ?? '' }}"
                 class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
             </div>
             <div class="mb-6">
               <h4 class="font-semibold mb-3">Jenis Kendaraan</h4>
-              <select id="type" name="type"
+              <select id="type"
                 class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                 <option value="kendaraan" {{ $type == 'kendaraan' ? 'selected' : '' }}>Semua Jenis</option>
                 <option value="mobil" {{ $type == 'mobil' ? 'selected' : '' }}>Mobil</option>
@@ -137,9 +137,9 @@
               <div
                 class="bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 transform animate-on-scroll delay-{{ ($loop->index % 3) * 100 + 200 }} {{ $data->is_premium > 0 ? 'border-2 border-yellow-400' : '' }}">
                 <div class="flex flex-col md:flex-row">
-                  <div class="md:w-1/3 overflow-hidden">
+                  <div class="h-64 md:h-56 md:w-1/4 overflow-hidden">
                     <img
-                      src="{{ $data->photos->isNotEmpty() ? asset('storage/photo/' . $data->type . '/' . $data->photos->first()->photo_url) : 'https://placehold.co/600x400/1abc9c/ffffff?text=No+Image' }}"
+                      src="{{ $data->main_photo_url ? asset('storage/photo/' . $data->type . '/' . $data->main_photo_url) : 'https://placehold.co/600x400/1abc9c/ffffff?text=No+Image' }}"
                       alt="{{ $data->brand . ' ' . $data->model }}"
                       class="w-full h-full object-cover transition-transform duration-500 ease-in-out transform hover:scale-110">
                   </div>

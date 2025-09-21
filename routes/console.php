@@ -38,4 +38,4 @@ Schedule::call(function () {
         }
         Log::info(count($excessVehicleIds) .' iklan anda telah dikunci karena kuota Paket ' . $user->nama_paket . ' telah Habis.');
     }
-})->everyTenSeconds();
+})->everySixHours();
