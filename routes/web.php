@@ -106,7 +106,6 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/transaksi/{$id}', [AdminController::class, 'ownerTampilTransaksi']);
 
             Route::get('/paket', [AdminController::class, 'adminTampilPaket']);
-            // Route::post('/paket', [AdminController::class, 'adminAturPaket']);
             Route::post('/paket', [AdminController::class, 'adminAturPaket'])->name('admin.paket.store');
             Route::put('/paket/{id}', [AdminController::class, 'adminEditPaket']);
 

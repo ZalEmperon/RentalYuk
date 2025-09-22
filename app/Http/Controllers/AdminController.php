@@ -7,14 +7,15 @@ use App\Models\User;
 use App\Models\UserPlan;
 use App\Models\Vehicle;
 use App\Models\Transaction;
-use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 class AdminController extends Controller
 {
-    public function adminTampilDashboard()  
+    public function adminTampilDashboard()
     {
         $adminStats = DB::table('users')->join('vehicles', 'users.id', '=', 'vehicles.user_id')->where('users.role', '!=', 'admin')
             ->select(DB::raw('COUNT(DISTINCT users.id) as jumlah_user'))
@@ -22,10 +23,10 @@ class AdminController extends Controller
             ->selectRaw('(SELECT COUNT(*) FROM vehicles WHERE mod_status = "waiting") as jumlah_iklan_menunggu')
             ->first();
 
-        $recentTransactions = Transaction::with(['user', 'plan']) 
-            ->where('status', 'success') 
-            ->latest()                   
-            ->take(5)                   
+        $recentTransactions = Transaction::with(['user', 'plan'])
+            ->where('status', 'success')
+            ->latest()
+            ->take(5)
             ->get();
 
         $monthlyRevenue = Transaction::where('status', 'success')
@@ -143,6 +144,10 @@ class AdminController extends Controller
                     'status' => 'active'
                 ]
             );
+            DB::table('users')->join('user_plans', 'users.id', '=', 'user_plans.user_id')
+                ->join('vehicles', 'users.id', '=', 'vehicles.user_id')
+                ->where('user_plans.plan_id', '=', '1')->where('users.id', Auth::user()->id)
+                ->update(['vehicles.is_premium' => 1]);
             // ✅ Unlock vehicles based on new plan quota
             $allowedQuota = $plan->quota_ads ?? 1; // default to 1 if null (Free plan)
 
@@ -183,10 +188,10 @@ class AdminController extends Controller
     public function getChartData()
     {
         $monthlyData = Transaction::select(
-                DB::raw('YEAR(created_at) as year'),
-                DB::raw('MONTH(created_at) as month'),
-                DB::raw('SUM(amount) as total')
-            )
+            DB::raw('YEAR(created_at) as year'),
+            DB::raw('MONTH(created_at) as month'),
+            DB::raw('SUM(amount) as total')
+        )
             ->where('status', 'success')
             ->where('created_at', '>=', Carbon::now()->subMonths(5)->startOfMonth()) // Ambil data 6 bulan terakhir
             ->groupBy('year', 'month')
@@ -203,12 +208,12 @@ class AdminController extends Controller
             $monthData = $monthlyData->first(function ($item) use ($date) {
                 return $item->year == $date->year && $item->month == $date->month;
             });
-            
+
             // Tambahkan nama bulan ke label
             $labels[] = $date->translatedFormat('F'); // Format nama bulan dalam Bahasa Indonesia
             // Tambahkan total pendapatan, atau 0 jika tidak ada
             $data[] = $monthData ? $monthData->total : 0;
-            
+
             $date->addMonth();
         }
 

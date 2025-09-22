@@ -11,6 +11,12 @@ Schedule::call(function () {
         ->where('end_date', '<', now())
         ->update(['plan_id' => 1, 'end_date' => null]);
 
+    DB::table('users')
+        ->join('user_plans', 'users.id', '=', 'user_plans.user_id')
+        ->join('vehicles', 'users.id', '=', 'vehicles.user_id')
+        ->where('user_plans.plan_id','=','1')
+        ->update(['vehicles.is_premium' => 0]);
+
     $excessUsers = DB::table('users')
         ->join('user_plans', 'users.id', '=', 'user_plans.user_id')
         ->join('plans', 'user_plans.plan_id', '=', 'plans.id')
@@ -39,4 +45,4 @@ Schedule::call(function () {
         }
         Log::info(count($excessVehicleIds) .' iklan anda telah dikunci karena kuota Paket ' . $user->nama_paket . ' telah Habis.');
     }
-})->everyTenSeconds();
+})->everyThreeHours();

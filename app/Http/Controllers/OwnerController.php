@@ -21,19 +21,20 @@ class OwnerController extends Controller
 {
     public function ownerTampilDashboard()
     {
-        $ownerQuotas = DB::table('user_plans')
+        $ownerStats = DB::table('user_plans')
             ->join('plans', 'plans.id', '=', 'user_plans.plan_id')
             ->leftJoin('vehicles', 'user_plans.user_id', '=', 'vehicles.user_id')
             ->where('user_plans.user_id', Auth::user()->id)->whereNot('vehicles.status', 'locked')->whereNot('vehicles.mod_status', 'locked')
-            ->select('plans.quota_ads', DB::raw('COUNT(vehicles.id) as jumlah_iklan'), DB::raw('SUM(vehicles.view_count) as jumlah_lihat'))
-            ->groupBy('plans.quota_ads')
+            ->select('plans.quota_ads', 'user_plans.end_date', 'user_plans.plan_id', 'plans.name',
+            DB::raw('COUNT(vehicles.id) as jumlah_iklan'), DB::raw('SUM(vehicles.view_count) as jumlah_lihat'))
+            ->groupBy('plans.quota_ads', 'user_plans.end_date', 'user_plans.plan_id', 'plans.name')
             ->first();
         $ownerDatas = DB::table('vehicles')
             ->where('user_id', Auth::user()->id)
             ->select('id', 'brand', 'model', 'view_count', 'price_per_day', 'status', 'mod_status', 'created_at')
             ->orderBy('created_at', 'DESC')
             ->get();
-        return view('owner.dashboard', compact('ownerQuotas', 'ownerDatas'));
+        return view('owner.dashboard', compact('ownerStats', 'ownerDatas'));
     }
 
     public function ownerStatusIklan($id)

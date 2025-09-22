@@ -110,7 +110,7 @@
                   placeholder="Masukan Kuota Iklan Kendaraan" required />
               </div>
               <div class="mb-5 md:w-100 md:ps-2">
-                <label for="adsTime" class="block mb-2 text-sm font-medium text-gray-900">Waktu Berlaku Paket</label>
+                <label for="adsTime" class="block mb-2 text-sm font-medium text-gray-900">Waktu Berlaku Paket (/hari)</label>
                 <input type="number" id="adsTime" name="duration_days"
                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                   placeholder="Berlaku selamanya jika tidak diisi" />
