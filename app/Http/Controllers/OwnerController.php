@@ -24,7 +24,7 @@ class OwnerController extends Controller
         $ownerStats = DB::table('user_plans')
             ->join('plans', 'plans.id', '=', 'user_plans.plan_id')
             ->leftJoin('vehicles', 'user_plans.user_id', '=', 'vehicles.user_id')
-            ->where('user_plans.user_id', Auth::user()->id)->whereNot('vehicles.status', 'locked')->whereNot('vehicles.mod_status', 'locked')
+            ->where('user_plans.user_id', Auth::user()->id)
             ->select('plans.quota_ads', 'user_plans.end_date', 'user_plans.plan_id', 'plans.name',
             DB::raw('COUNT(vehicles.id) as jumlah_iklan'), DB::raw('SUM(vehicles.view_count) as jumlah_lihat'))
             ->groupBy('plans.quota_ads', 'user_plans.end_date', 'user_plans.plan_id', 'plans.name')
